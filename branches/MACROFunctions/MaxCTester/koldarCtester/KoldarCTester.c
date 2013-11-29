@@ -1,4 +1,4 @@
-#include "MaxTester.h"
+/*#include "KoldarCTester.h"
 #include <stdlib.h>
 
 static TestList* initTestList(){
@@ -25,7 +25,7 @@ static void addTestCase(TestList* list,TestFunction test,const char* description
 	strcpy(enddescription,description);
 
 	TestListElement* newadd=initTestList();
-	newadd->function=test;
+	newadd->testFunction=test;
 	newadd->next=NULL;
 	newadd->description=enddescription;
 	newadd->skip=toberun==true?MCT_UNKNOWN:MCT_SKIPPED;
@@ -65,7 +65,7 @@ static void runAllTest(FILE* f,TestList* list, bool postDelete){
 		//TODO find a way to print out the function name
 		fprintf(f,"%s TEST \"%s\" %s\n",TESTSEPARATOR,testToRun->description,TESTSEPARATOR);
 		fprintf(f,"\n");
-		testToRun->result=testToRun->function()?MCT_SUCCESS:MCT_FAIL;
+		testToRun->result=testToRun->testFunction()?MCT_SUCCESS:MCT_FAIL;
 		fprintf(f,"\n");
 		testToRun=testToRun->next;
 	}
@@ -120,4 +120,4 @@ static char* copyString(const char* msg){
 	}
 	strcpy(result,msg);
 	return result;
-}
+}*/

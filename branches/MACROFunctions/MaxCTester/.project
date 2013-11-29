@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>MaxCTester</name>
+	<name>KoldarCTester</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -23,4 +23,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>index.html</name>
+			<type>1</type>
+			<locationURI>PARENT_LOC/doc/html/index.html</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
