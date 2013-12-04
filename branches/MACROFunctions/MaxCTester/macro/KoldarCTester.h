@@ -241,6 +241,29 @@
 #	define KCT_TESTSEPARATOR KCT_CONTROLMACRO_TESTSEPARATOR
 #endif
 
+
+//TODO documentaation
+#ifndef KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
+	/**\brief Represents the string to print before the expected value in the error message
+	 *
+	 * The syntax of the error message is shown here:
+	 *
+	 * !!!ERROR!!! <errorMessage> <KCT_ERRORMESSAGE_EXPECTED> <value expected>
+	 *
+	 */
+#	define KCT_ERRORMESSAGE_EXPECTED "\nExpected value: "
+#else
+#	define KCT_ERRORMESSAGE_EXPECTED KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
+#endif
+
+//TODO documentation
+#ifndef KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
+	//TODO documentation
+#	define KCT_ERRORMESSAGE_ACTUAL "\nActual value: "
+#else
+#	define KCT_ERRORMESSAGE_ACTUAL KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
+#endif
+
 /**@brief represents the outcome of a test function
  *
  * The outcome of a test function can be:
@@ -556,7 +579,6 @@ typedef struct TestList {
 	} \
 }
 
-
 /**Represents the list holding every test.
  * This variable is used to simplify the MACRO prototype
  */
@@ -625,7 +647,7 @@ static TestListElement* currentTest;
  *
  */
 #define failMsg(message) \
-	currentTest->errorMessage=copyString(message);\
+	PRIVATE_KCT_COPYSTRING(currentTest->errorMessage,message); \
 	currentTest->result=PRIVATE_KCT_FAIL; \
 	return;
 
@@ -651,11 +673,11 @@ static TestListElement* currentTest;
  * In addition to end the test if condition is *not* met, this
  * function will display an error message.
  *
- * @param condition represents the condition to be test
  * @param [char*]message represents the error message to be display if the condition
  * 	is not met
+ * @param condition represents the condition to be test
  */
-#define assertConditionMsg(condition,message) \
+#define assertConditionMsg(message,condition) \
 	if ((condition)==false){ \
 		failMsg(message); \
 	}
@@ -667,32 +689,32 @@ static TestListElement* currentTest;
 	}
 
 //TODO documentation
-#define assertNotConditionMsg(condition,message) \
+#define assertNotConditionMsg(message,condition) \
 	if ((condtion)==true){ \
 		failMsg(message); \
 	}
 
 //TODO documentation
 #define assertEqual(expected,actual) \
-	if (expected!=actual) { \
+	if ((expected)!=(actual)) { \
 		return false; \
 	}
 
 //TODO documentation
 #define assertEqualMsg(message,expected,actual) \
-	if (expected!=actual){ \
+	if ((expected)!=(actual)){ \
 		failMsg(message); \
 	}
 
 //TODO documentation
 #define assertNotEqual(expected,actual) \
-	if (expected==actual) { \
+	if ((expected)==(actual)) { \
 		fail(); \
 	}
 
 //TODO documentation
 #define assertNotEqualMsg(message,expected,actual) \
-	if (expected==actual) { \
+	if ((expected)==(actual)) { \
 		failMsg(message); \
 	}
 
@@ -705,6 +727,18 @@ static TestListElement* currentTest;
 //TODO documentation
 #define assertNotNullMsg(message,pointer) \
 	if (pointer==NULL){ \
+		failMsg(message); \
+	}
+
+//TODO documentation
+#define assertIsNull(pointer) \
+	if (pointer!=NULL){ \
+		fail(); \
+	}
+
+//TODO documentation
+#define assertIsNullMsg(message,pointer) \
+	if (pointer!=NULL){ \
 		failMsg(message); \
 	}
 
