@@ -1,5 +1,7 @@
 //#include "KoldarCTester.h"
 
+#define KCT_CONTROLMACRO_TESTSEPARATOR "%%%%%%%%%%%%%%%"
+
 #include "KoldarCTester.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -98,10 +100,17 @@ bool testOK2(){
 		}
 	}
 
+	void testNumber(){
+		assertEqualIntMsg("Number are mismatching",4,4);
+		ok();
+	}
+
 	int main(){
+
 		//add tests in the function list
 		kct_addTest(testRandomX);
 		kct_addTest(testPower);
+		kct_addTest(testNumber);
 		//run the tests
 		kct_runAllTest(stdout);
 		return 0;

@@ -203,6 +203,52 @@
  *	of failed tests <b>must always be 0%</b>.
  *
  *
+ *	\section section07 "Deeper understanding of KoldarCTester.h"
+ *
+ *	As we have said before, KoldarCTester basically creates a test list and loop over it.
+ *
+ *	\dot
+ *		digraph list {
+ *			rankdir="LR";
+ *			TestListHead [label="test list head structure\nmetadata"];
+ *			A [label="Test 1\n(head)"];
+ *			B [label="Test 2"];
+ *			C [label="Test 3"];
+ *			D [label="Test 4"];
+ *			E [label="Test 5"];
+ *			F [label="Test 6\n(tail)"];
+ *
+ *			TestListHead -> A ->B -> C ->D ->E ->F;
+ *		}
+ *	\endot
+ *
+ *	Firstly the list (which in the header has type TestList) is NULL. When someone use the function
+ *	kct_addTest() or a similar function, the header automatically initialize the metadata of the list
+ *	(stored in a TestList structure). This struct has some metadata like:
+ *	 \li head (basilar if you want to loop over the list!);
+ *	 \li tail (used to speed up the process of appending test at the tail of the list);
+ *	 \li size;
+ *
+ *	When someone use kct_addTest() (or a similar function) the header automatically initialize a new
+ *	element of TestListElement containing a pointer of the test functions (it also contains other small
+ *	metadata). The newly created struct is then append at the tail of the list. Some of the metadata stored
+ *	in a TestListElement is:
+ *	\li the test function;
+ *	\li result (the outcome of this test);
+ *
+ *	The process continue over and over again until the main call kct_runAllTest(): when it happens,
+ *	the program	will loop through the TestListElements in the list (starting from the head one);
+ *	for each of them the header will run the test function and will update some of the metadata, including
+ *	the field result: this result will be important at the end of all tests, when the header has
+ *	to generate statistics (like the number of test failures).
+ *
+ *	To allow such compact APIs, Koldar C Tester uses 2 variables:
+ *	\li a default TestList object which is used by every function in the header as default TestList: in this
+ *	way there's no need for the developer to manually create and initialize such list;
+ *	\li a variable currentTest: while the program iterate through out all the list element, every TestListElement
+ *	is stored in a temporary variable. In this way the program can exactly know what TestListElement it is handling;
+ *
+ *
  * \date Nov 27, 2013
  * \author koldar
  * \version 1.0
@@ -215,6 +261,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 /* as suggested in the gcc manual http://gcc.gnu.org/onlinedocs/gcc/Function-Names.html
  * I have added this preprocessorn commands to increase portability of the code in order
@@ -228,27 +275,63 @@
 #	endif
 #endif
 
-/** * This macro controls the string separator between 2 test function.
- * THe default one is the string "**************"
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@ CONTROL MACRO DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+/**This macro controls the string separator between 2 test function.
+ * The default one is the string "**************"
+ * Compile your test program with KCT_CONTROLMACRO_TESTSEPARATOR enabled to change the
+ * separator between test functions:
+ * \code
+ *	#define KCT_CONTROLMACRO_TESTSEPARATOR "%%%%%%%%%%%%%%%%"
+ * \endcode
  *
+ * \image html image02.png
+ *
+ *
+ * \warning{
+ * 	To enable this custom behaviour, define KCT_CONTROLMACRO_TESTSEPARATOR <b>before</b>
+ * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
+ * 	enabled.
+ * }
  */
 #ifndef KCT_CONTROLMACRO_TESTSEPARATOR
-	/**\brief Represents the string that separates 2 test function in the output
-	 *
-	 */
+/**\brief Represents the string that separates 2 test function in the output
+ *
+ */
 #	define KCT_TESTSEPARATOR "**************"
 #else
 #	define KCT_TESTSEPARATOR KCT_CONTROLMACRO_TESTSEPARATOR
 #endif
 
 
-//TODO documentaation
+/**This macro allows you to change the default string that is printed out after the developer message
+ * in the event a test fails. This string will printed only when macro functions like assertEqualXXXMsg()
+ * are called; the macro isn't influenting failMsg() or AssertCondMsg() assertion like!
+ *
+ * If you want to change the default value, define KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
+ * as your custom string, like in this example:
+ *
+ * \code
+ * 	#define KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED "\nEXPECTED VALUE"
+ * \endcode
+ *
+ * The default value is: "\nExpected value: ".
+ *
+ * \warning{
+ * 	To enable this custom behaviour, define KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED <b>before</b>
+ * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
+ * 	enabled.
+ * }
+ *
+ */
 #ifndef KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
 	/**\brief Represents the string to print before the expected value in the error message
 	 *
 	 * The syntax of the error message is shown here:
 	 *
-	 * !!!ERROR!!! <errorMessage> <KCT_ERRORMESSAGE_EXPECTED> <value expected>
+	 * !!!ERROR!!! <errorMessage> <KCT_ERRORMESSAGE_EXPECTED> <value expected> <KCT_ERRORMESSAGE_ACTUAL> <actual value>
 	 *
 	 */
 #	define KCT_ERRORMESSAGE_EXPECTED "\nExpected value: "
@@ -256,35 +339,66 @@
 #	define KCT_ERRORMESSAGE_EXPECTED KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
 #endif
 
-//TODO documentation
+/**This macro allows you to change the default string that is printed out after the developer message
+ * in the event a test fails. This string will printed only when macro functions like assertEqualXXXMsg()
+ * are called; the macro isn't influenting failMsg() or AssertCondMsg() assertion like!
+ *
+ * If you want to change the default value, define KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
+ * as your custom string, like in this example:
+ *
+ * \code
+ * 	#define KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL "\nACTUAL VALUE"
+ * \endcode
+ *
+ * The default value is: "\nActual value: ".
+ *
+ * \warning{
+ * 	To enable this custom behaviour, define KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL <b>before</b>
+ * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
+ * 	enabled.
+ * }
+ *
+ */
 #ifndef KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
-	//TODO documentation
+	/**\brief Represents the string to print before the actual value in the error message
+	 *
+	 * The syntax of the error message is shown here:
+	 *
+	 * !!!ERROR!!! <errorMessage> <KCT_ERRORMESSAGE_EXPECTED> <value expected> <KCT_ERRORMESSAGE_ACTUAL> <actual value>
+	 *
+	 */
 #	define KCT_ERRORMESSAGE_ACTUAL "\nActual value: "
 #else
 #	define KCT_ERRORMESSAGE_ACTUAL KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
 #endif
 
-/**@brief represents the outcome of a test function
+/**This macro allows you to change the default size of the buffer used to convert values into strings.
+ * The buffer is useful only in assertions like assertEqualXXXMsg().
  *
- * The outcome of a test function can be:
- *  -* MCT_SUCCESS: the test has ended successfully;
- *  -* MCT_FAIL: something has gone wrong in the test;
- *  -* MCT_SKIPPED: the test was in the list but it was commanded to skip it;
- *  -* MCT_UNKNOWN: The initial value of the field "result" for every test function that has not already been executed
+ * \note {The default value is 15}
+ *
+ * For example, let assume you want to convert the number 1234567890123456789. Being this number much
+ * longer than 15 the header will stringify will wrongly. By defining this custom value,
+ * you can easily increase the buffer size, solving the problem.
+ *
+ * \warning{
+ * 	To enable this custom behaviour, define KCT_CONTROLMACRO_STRINGBUFFER <b>before</b>
+ * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
+ * 	enabled.
+ * }
  */
+#ifndef KCT_CONTROLMACRO_STRINGBUFFER
+	/**Represents the size of the buffer used to convert number (float or integer it doesn't matter)
+	 * to strings. The constant is mainly used in the macros like PRIVATE_KCT_ITOA or PRIVATE_KCT_FTOA
+	 */
+#	define KCT_STRINGBUFFER 15
+#else
+#	define KCT_STRINGBUFFER KCT_CONTROLMACRO_STRINGBUFFER
+#endif
 
-/**\brief Represents the outcome of a test function when the test utterly fails
- */
-#define PRIVATE_KCT_FAIL 0
-/**\brief Represents the outcome of a test function when the test terminates successfully
- */
-#define PRIVATE_KCT_SUCCESS 1
-/**\brief Represents the outcome of a test function when the test was to be skipped
- */
-#define PRIVATE_KCT_SKIPPED 2
-/**\brief Represents the outcome of a test function that has not yet been executed
- */
-#define PRIVATE_KCT_UNKNOWN 3
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@ STRUCTURES DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 /**\brief type of a generic test function.
  *
@@ -354,6 +468,27 @@ typedef struct TestList {
 	int size;
 } TestList;
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PRIVATE MACRO DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+/**\brief Represents the outcome of a test function when the test utterly fails
+ *
+ */
+#define PRIVATE_KCT_FAIL 0
+/**\brief Represents the outcome of a test function when the test terminates successfully
+ *
+ */
+#define PRIVATE_KCT_SUCCESS 1
+/**\brief Represents the outcome of a test function when the test was to be skipped
+ *
+ */
+#define PRIVATE_KCT_SKIPPED 2
+/**\brief Represents the outcome of a test function that has not yet been executed
+ *
+ */
+#define PRIVATE_KCT_UNKNOWN 3
+
 /**\brief copy a string in another one
  *
  * It it highly suggested that constantString is a constant String or
@@ -377,6 +512,88 @@ typedef struct TestList {
 		exit -1; \
 	} \
 	strcpy((char*)destinationpointer,constantString)
+
+/**\brief convert an integer to string
+ *
+ * \warning {
+ * 	It is highly recommended that you use as "string" parameter only a
+ * 	simple variable. Complex formula might cause instabilities
+ * }
+ *
+ * Some example of this function use might be:
+ * \code
+ * 	//converts 4 in a string
+ *	PRIVATE_KCT_INITSTRING(string,4,"%d");
+ *	//converts 4.45 in a string
+ *	PRIVATE_KCT_INITSTRING(string,4.45,"%2.3f");
+ *	//converts 4 in a string
+ *	PRIVATE_KCT_INITSTRING(string,4,"%lu");
+ * \endcode
+ *
+ * \pre
+ *  \li string must not be initialized
+ *  \li string must be of type char*
+ *  \li num must be of type number; it might be:
+ *   -* int
+ *   -* short
+ *   -* long
+ *   -* float
+ *   -* double
+ *   -* various unsigned
+ *  \li conversion must be a constant string;
+ *  \li conversion must be a conversion printf format string;
+ * \post
+ *  \li string contains a string representation of num;
+ *  \li string lead to an allocated space of memory that <b>must</b> be free manually with PRIVATE_KCT_FREESTRING();
+ *
+ *  @param string the pointer that will lead to the string representation of num
+ *  @param num the integer number to convert
+ */
+#define PRIVATE_KCT_INITSTRING(string,num,conversion) \
+	string=malloc(KCT_STRINGBUFFER); \
+	sprintf(string,conversion,num);
+
+/**\brief free an already allocated string
+ *
+ * \warning {
+ * 	It is highly recommended that you use as "string" parameter only a
+ * 	simple variable. Complex formula might cause instabilities
+ * }
+ *
+ * \pre
+ *  \li string was allocated with PRIVATE_KCT_INITSTRING;
+ * \post
+ *  \li string is freed from the memory;
+ *
+ * @param string the string to be deallocated;
+ *
+ */
+#define PRIVATE_KCT_FREESTRING(string) \
+	free(string);
+
+/**\brief compose a new string by concatenating all the strings in the the give array
+ *
+ * \pre
+ *  \li destination must be a char*
+ *  \li destination must not be already mallocated
+ *  \li string1-5 must be char* (or constant strings)
+ * \post
+ *  \li destination is a char* pointing to a string computed by concatenating all the
+ *  	strings together.
+ *
+ * @param destination the pointer linking the strings concatenated
+ * @param strings the set of string to be concatenated
+ */
+#define PRIVATE_KCT_COMPOSESTRING(destination,string1,string2,string3,string4,string5) { \
+	destination=malloc(1+strlen(string1)+strlen(string2)+strlen(string3)+strlen(string4)+strlen(string5)); \
+	strcat(destination,string1); \
+	strcat(destination,string2); \
+	strcat(destination,string3); \
+	strcat(destination,string4); \
+	strcat(destination,string5); \
+}
+
+
 
 /**\brief constructs an empty test list
  *
@@ -530,7 +747,7 @@ typedef struct TestList {
 		if (testToRun->result == PRIVATE_KCT_UNKNOWN){ \
 			testToRun->result=PRIVATE_KCT_SUCCESS; \
 		}else { \
-			fprintf(_f,"!!!ERROR!!! \"%s\"\n",testToRun->errorMessage); \
+			fprintf(_f,"!!!ERROR!!! %s\n",testToRun->errorMessage); \
 		} \
 		fprintf(_f,"\n"); \
 		testToRun=testToRun->next; \
@@ -579,6 +796,10 @@ typedef struct TestList {
 	} \
 }
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ VARIABLE USED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 /**Represents the list holding every test.
  * This variable is used to simplify the MACRO prototype
  */
@@ -591,6 +812,10 @@ TestList* testList=NULL;
  *
  */
 static TestListElement* currentTest;
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@ PUBLIC MACRO DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 /**\brief adds a new function in the test list
  *
@@ -612,7 +837,17 @@ static TestListElement* currentTest;
 	} \
 	PRIVATE_KCT_ADDTESTCASE(testList,function,#function,torun)
 
-//TODO documentation
+/**\brief adds a new function in the test list
+ *
+ * \pre
+ *  \li function has already been defined;
+ *  \li function must have no formal parameters;
+ *  \li function must return a void type;
+ * \post
+ *  \li the function is inside the test list
+ *
+ * @param [TestFunction]function the function to include in the test list;
+ */
 #define kct_addTest(function) \
 	kct_addTestImproved(function,true)
 
@@ -632,6 +867,11 @@ static TestListElement* currentTest;
  */
 #define kct_runAllTest(outputfile) \
 	PRIVATE_KCT_RUNALLTEST(outputfile,testList,true)
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ASSERTION MACROS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 
 /**\brief Terminate the test and set the result of it as a failure.
  *
@@ -655,7 +895,6 @@ static TestListElement* currentTest;
  *
  */
 #define ok() \
-	currentTest->result=PRIVATE_KCT_SUCCESS; \
 	return;
 
 
@@ -693,6 +932,138 @@ static TestListElement* currentTest;
 	if ((condtion)==true){ \
 		failMsg(message); \
 	}
+
+/**\brief Checks if 2 simple values are equal. If not, send an error
+ *
+ * The function checks if 2 data are equal. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * The function can manage only simple data: they include:
+ *  \li int;
+ *  \li short;
+ *  \li long;
+ *  \li float;
+ *  \li double;
+ *  \li unsigned variations;
+ *  \li pointer variations (check the very pointers, not the structure pointed by them);
+ *  \li enumerations;
+ *
+ * \warning {While stirng and structure can be inserted as values to be checked,
+ * the function can't compare them with ease. If you have to compare strings or structures,
+ * please use PRIVATE_KCT_ASSERTSTRINGEQUAL or PRIVATE_KCT_ASSERTSTRUCTEQUAL}
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li type is a simple type;
+ *  \li conversion is a formatter string, like "%d";
+ *  \li expected is a value of type type;
+ *  \li actual is a value of type type;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param type represents the type of expected and actual values;
+ * @param conversion represents the formatter string used to format the stirng representations of expected and actual;
+ * @param expected the value that the developer expects to get;
+ * @param actual the very value received
+ */
+#define assertEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
+	type intexpected=(expected); \
+	type intactual=(actual); \
+	if ((intactual)!=(intexpected)){ \
+		char* str_exp; \
+		char* str_act; \
+		PRIVATE_KCT_INITSTRING(str_exp,intexpected,conversion); \
+		PRIVATE_KCT_INITSTRING(str_act,intactual,conversion); \
+		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
+			message, \
+			KCT_ERRORMESSAGE_EXPECTED, \
+			str_exp, \
+			KCT_ERRORMESSAGE_ACTUAL, \
+			str_act); \
+		PRIVATE_KCT_FREESTRING(str_exp); \
+		PRIVATE_KCT_FREESTRING(str_act); \
+		fail(); \
+	} \
+}
+
+/**\brief Checks if 2 simple values are not equal. If not, send an error
+ *
+ * The function checks if 2 data are different. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * The function can manage only simple data: they include:
+ *  \li int;
+ *  \li short;
+ *  \li long;
+ *  \li float;
+ *  \li double;
+ *  \li unsigned variations;
+ *  \li pointer variations (check the very pointers, not the structure pointed by them);
+ *  \li enumerations;
+ *
+ * \warning {While stirng and structure can be inserted as values to be checked,
+ * the function can't compare them with ease. If you have to compare strings or structures,
+ * please use PRIVATE_KCT_ASSERTSTRINGEQUAL or PRIVATE_KCT_ASSERTSTRUCTEQUAL}
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li type is a simple type;
+ *  \li conversion is a formatter string, like "%d";
+ *  \li expected is a value of type type;
+ *  \li actual is a value of type type;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param type represents the type of expected and actual values;
+ * @param conversion represents the formatter string used to format the string representations of expected and actual;
+ * @param expected the value that the developer expects to get;
+ * @param actual the very value received
+ */
+#define assertNotEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
+	type intexpected=(expected); \
+	type intactual=(actual); \
+	if ((intactual)==(intexpected)){ \
+		char* str_exp; \
+		char* str_act; \
+		PRIVATE_KCT_INITSTRING(str_exp,intexpected,conversion); \
+		PRIVATE_KCT_INITSTRING(str_act,intactual,conversion); \
+		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
+			message, \
+			KCT_ERRORMESSAGE_EXPECTED, \
+			str_exp, \
+			KCT_ERRORMESSAGE_ACTUAL, \
+			str_act); \
+		PRIVATE_KCT_FREESTRING(str_exp); \
+		PRIVATE_KCT_FREESTRING(str_act); \
+		fail(); \
+	} \
+}
+
+//TODO documentation
+#define assertEqualIntMsg(message,expected,actual) \
+	assertEqualPrimitiveMsg(message,int,"%d",expected,actual)
+
+//TODO documentation
+#define assertNotEqualIntMsg(message,expected,actual) \
+	assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
+
+//TODO documentation
+#define assertEqualFloatMsg(message,expected,actual) \
+	assertEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
+
+//TODO documentation
+#define assertNotEqualFloatMsg(message,expected,actual) \
+	assertNotEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
 
 //TODO documentation
 #define assertEqual(expected,actual) \
@@ -757,6 +1128,7 @@ static TestListElement* currentTest;
 		fail(); \
 	}
 
+//FIXME lowerbound,upperbound,lowin,upin,actual must be stored in variable... if they has random components, the test is ill!
 //TODO documentation
 #define assertExtremisMsg(message,lowerbound,upperbound,lowin,upin,actual) \
 	if (actual<lowerbound){ \
