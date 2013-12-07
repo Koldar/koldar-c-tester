@@ -28,7 +28,7 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1507354553" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.448488566" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.738724176" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MaxCTester/maxCtester}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/KoldarCTester/macro}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.993354949" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -44,9 +44,23 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.717613518.1750649135" name="/" resourcePath="macro">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.2074120293" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.80355052" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.1660625862"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.133677204" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1305172037"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1403345493" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.398833366">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.273330337" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.979788241" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1621587092"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.896279046" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.190000601"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.428202994" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.1004239835">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1303232460" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
-						<entry excluding="test|maxCtester" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="maxCtester"/>
+						<entry excluding="macro|test|maxCtester" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="macro"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
