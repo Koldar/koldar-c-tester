@@ -1,3 +1,6 @@
+/**\file
+ *
+ */
 /**
  * \mainpage Koldar C Tester: a simple C tester
  * 
@@ -220,7 +223,7 @@
  *
  *			TestListHead -> A ->B -> C ->D ->E ->F;
  *		}
- *	\endot
+ *	\enddot
  *
  *	Firstly the list (which in the header has type TestList) is NULL. When someone use the function
  *	kct_addTest() or a similar function, the header automatically initialize the metadata of the list
@@ -954,7 +957,7 @@ static TestListElement* currentTest;
  *  \li pointer variations (check the very pointers, not the structure pointed by them);
  *  \li enumerations;
  *
- * \warning {While stirng and structure can be inserted as values to be checked,
+ * \warning {While string and structure can be inserted as values to be checked,
  * the function can't compare them with ease. If you have to compare strings or structures,
  * please use PRIVATE_KCT_ASSERTSTRINGEQUAL or PRIVATE_KCT_ASSERTSTRUCTEQUAL}
  *
@@ -1049,19 +1052,323 @@ static TestListElement* currentTest;
 	} \
 }
 
-//TODO documentation
+/**\public
+ * \brief Checks if 2 structured data are equal. If not, send an error
+ *
+ * The function checks if 2 structure data are equal. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * The function can easily manage structure data (typedef struct). To do so,
+ * however, it needs 2 functions:
+ *  \li a compare function: this function takes 2 structure value of the same type
+ *  	and checks if they are equal; if they are, the function returns 0, otherwise it returns a
+ *  	non zero value. Note that the function can be much complex than a equal/different function:
+ *  	like strcmp(), it might returns a negative number if the first struct has a less value than the second and/or
+ *  	a positive number if the first structure has a greater value than the second one. The important stuff is
+ *  	that it returns 0 if the 2 given structs are equal.
+ *  \li a string conversion functions: the function has to take only one parameter, the structure to stringify and
+ *  	must return a char*. Moreover, <b>it must allocate a new string</b>: this is mandatory because
+ *  	the function will automatically free the char pointer returned by the function.
+ *
+ * \warning {While primitive types can be inserted as values to be checked,
+ * the function can't compare them with ease. If you have to compare strings or structures,
+ * please use PRIVATE_KCT_ASSERTINTEQUAL or similar}
+ *
+ * An example of the use of this function:
+ * \code
+ *	typedef struct Point {
+ *		int x;
+ *		int y;
+ *	} Point;
+ *
+ *	char* Point2String(Point p){
+ *		char* buffer=malloc(100);
+ *		sprintf(buffer,"(%d %d)",p.x,p.y);
+ *		return buffer;
+ *	}
+ *
+ *	int comparePoints(Point p1,Point p2){
+ *		if (p1.x!=p2.x){
+ *			return 1;
+ *		}
+ *		if (p1.y!=p2.y){
+ *			return 1;
+ *		}
+ *		return 0;
+ *	}
+ *
+ *	void testOK(){
+ *		Point px;
+ *		Point py;
+ *		px.x=5;
+ *		px.y=4;
+ *		py.x=5;
+ *		py.y=5;
+ *		assertEqualStructMsg(
+ *			"the 2 points are different!",
+ *			Point,
+ *			Point2String,
+ *			comparePoints,
+ *			px,
+ *			py);
+ *	}
+ *
+ *	int main(){
+ *		kct_addTest(testOK);
+ *		kct_runAllTest(stdout);
+ *		return 0;
+ *	}
+ * \endcode
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li type is a struct type;
+ *  \li toStringFunction is a name of a declared function;
+ *  \li toStringFunction takes only one parameter of type "type";
+ *  \li toStringFunction return a char*;
+ *  \li toStringFunction allocates a new string in the heap representing the struct given;
+ *  \li compareFunction is a name of a declared function;
+ *  \li compareFunction takes only 2 paramters of type "type";
+ *  \li compareFunction returns 0 or another value;
+ *  \li compareFunction must return 0 if the 2 values are equal;
+ *  \li compareFunction must return any other value beside 0 if the 2 values are different;
+ *  \li expected is a value of type type;
+ *  \li actual is a value of type type;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param type represents the type of expected and actual values and the type
+ * 	of the parameters of the functions toStringFunction and compareFunction;
+ * @param toStringFunction represents the name
+ * @param expected the value that the developer expects to get;
+ * @param actual the very value received
+ */
+#define assertEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
+	type structexpected=expected; \
+	type structactual=actual; \
+	if (compareFunction(structexpected,structactual)!=0){ \
+		char* str_exp=toStringFunction(structexpected); \
+		char* str_act=toStringFunction(structactual); \
+		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
+			message, \
+			KCT_ERRORMESSAGE_EXPECTED, \
+			str_exp, \
+			KCT_ERRORMESSAGE_ACTUAL, \
+			str_act); \
+		PRIVATE_KCT_FREESTRING(str_exp); \
+		PRIVATE_KCT_FREESTRING(str_act); \
+		fail(); \
+	} \
+}
+
+/**\public
+ * \brief Checks if 2 structured data are different. If not, send an error
+ *
+ * The function checks if 2 structure data are different. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * The function can easily manage structure data (typedef struct). To do so,
+ * however, it needs 2 functions:
+ *  \li a compare function: this function takes 2 structure value of the same type
+ *  	and checks if they are equal; if they are, the function returns 0, otherwise it returns a
+ *  	non zero value. Note that the function can be much complex than a equal/different function:
+ *  	like strcmp(), it might returns a negative number if the first struct has a less value than the second and/or
+ *  	a positive number if the first structure has a greater value than the second one. The important stuff is
+ *  	that it returns 0 if the 2 given structs are equal.
+ *  \li a string conversion functions: the function has to take only one parameter, the structure to stringify and
+ *  	must return a char*. Moreover, <b>it must allocate a new string</b>: this is mandatory because
+ *  	the function will automatically free the char pointer returned by the function.
+ *
+ * \warning {While primitive types can be inserted as values to be checked,
+ * the function can't compare them with ease. If you have to compare strings or structures,
+ * please use PRIVATE_KCT_ASSERTINTEQUAL or similar}
+ *
+ * An example of the use of this function:
+ * \code
+ *	typedef struct Point {
+ *		int x;
+ *		int y;
+ *	} Point;
+ *
+ *	char* Point2String(Point p){
+ *		char* buffer=malloc(100);
+ *		sprintf(buffer,"(%d %d)",p.x,p.y);
+ *		return buffer;
+ *	}
+ *
+ *	int comparePoints(Point p1,Point p2){
+ *		if (p1.x!=p2.x){
+ *			return 1;
+ *		}
+ *		if (p1.y!=p2.y){
+ *			return 1;
+ *		}
+ *		return 0;
+ *	}
+ *
+ *	void testOK(){
+ *		Point px;
+ *		Point py;
+ *		px.x=5;
+ *		px.y=4;
+ *		py.x=5;
+ *		py.y=4;
+ *		assertNotEqualStructMsg(
+ *			"the 2 points are equal!",
+ *			Point,
+ *			Point2String,
+ *			comparePoints,
+ *			px,
+ *			py);
+ *	}
+ *
+ *	int main(){
+ *		kct_addTest(testOK);
+ *		kct_runAllTest(stdout);
+ *		return 0;
+ *	}
+ * \endcode
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li type is a struct type;
+ *  \li toStringFunction is a name of a declared function;
+ *  \li toStringFunction takes only one parameter of type "type";
+ *  \li toStringFunction return a char*;
+ *  \li toStringFunction allocates a new string in the heap representing the struct given;
+ *  \li compareFunction is a name of a declared function;
+ *  \li compareFunction takes only 2 paramters of type "type";
+ *  \li compareFunction returns 0 or another value;
+ *  \li compareFunction must return 0 if the 2 values are equal;
+ *  \li compareFunction must return any other value beside 0 if the 2 values are different;
+ *  \li expected is a value of type type;
+ *  \li actual is a value of type type;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param type represents the type of expected and actual values and the type
+ * 	of the parameters of the functions toStringFunction and compareFunction;
+ * @param toStringFunction represents the name
+ * @param expected the value that the developer expects to get;
+ * @param actual the very value received
+ */
+#define assertNotEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
+	type structexpected=expected; \
+	type structactual=actual; \
+	if (compareFunction(structexpected,structactual)==0){ \
+		char* str_exp=toStringFunction(structexpected); \
+		char* str_act=toStringFunction(structactual); \
+		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
+			message, \
+			KCT_ERRORMESSAGE_EXPECTED, \
+			str_exp, \
+			KCT_ERRORMESSAGE_ACTUAL, \
+			str_act); \
+		PRIVATE_KCT_FREESTRING(str_exp); \
+		PRIVATE_KCT_FREESTRING(str_act); \
+		fail(); \
+	} \
+}
+
+/**\brief Checks if 2 integer values are equal. If not, send an error
+ *
+ * The function checks if 2 integer are equal. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li expected is a value of type int;
+ *  \li actual is a value of type int;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param [int]expected the value that the developer expects to get;
+ * @param [int]actual the very value received
+ */
 #define assertEqualIntMsg(message,expected,actual) \
 	assertEqualPrimitiveMsg(message,int,"%d",expected,actual)
 
-//TODO documentation
+/**\brief Checks if 2 integer values are not equal. If not, send an error
+ *
+ * The function checks if 2 integer are different. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li expected is a value of type int;
+ *  \li actual is a value of type int;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param [int]expected the value that the developer expects to get;
+ * @param [int]actual the very value received
+ */
 #define assertNotEqualIntMsg(message,expected,actual) \
 	assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
 
-//TODO documentation
+/**\brief Checks if 2 float values are not equal. If not, send an error
+ *
+ * The function checks if 2 integer are equal. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li expected is a value of type float;
+ *  \li actual is a value of type float;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param [float]expected the value that the developer expects to get;
+ * @param [float]actual the very value received
+ */
 #define assertEqualFloatMsg(message,expected,actual) \
 	assertEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
 
-//TODO documentation
+/**\brief Checks if 2 float values are not equal. If not, send an error
+ *
+ * The function checks if 2 float are different. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li expected is a value of type float;
+ *  \li actual is a value of type float;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param [float]expected the value that the developer expects to get;
+ * @param [float]actual the very value received
+ */
 #define assertNotEqualFloatMsg(message,expected,actual) \
 	assertNotEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
 
