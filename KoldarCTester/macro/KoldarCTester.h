@@ -589,7 +589,7 @@ typedef struct TestList {
  */
 #define PRIVATE_KCT_COMPOSESTRING(destination,string1,string2,string3,string4,string5) { \
 	destination=malloc(1+strlen(string1)+strlen(string2)+strlen(string3)+strlen(string4)+strlen(string5)); \
-	strcat(destination,string1); \
+	strcpy(destination,string1); \
 	strcat(destination,string2); \
 	strcat(destination,string3); \
 	strcat(destination,string4); \
