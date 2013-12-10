@@ -67,7 +67,7 @@
  *	 	void testRandomX(){
  *			int i;
  *			for (i=0;i<100;i++){
- *				assertExtremis(0,9,true,true,rand()%10);
+ *				kct_assertExtremis(0,9,true,true,rand()%10);
  *			}
  *	 	}
  *
@@ -77,12 +77,12 @@
  *	 		int num;
  *	 		for (i=0;i<100;i++){
  *	 			num=rand()%100;
- *				assertCondition(num*num>=0);
+ *				kct_assertCondition(num*num>=0);
  *	 		}
  *	 	}
  *	 \endcode
  *
- *	 Let's skip up for the moment the "assertExtremis" and "assertCondition" part. Now you have created
+ *	 Let's skip up for the moment the "kct_assertExtremis" and "kct_assertCondition" part. Now you have created
  *	 all the test you need to verify some feature of your program. Now you need to run these; the main
  *	 function does exactly that:
  *
@@ -160,7 +160,7 @@
  *
  *	\code
  *		FILE* f=fopen("../test/fileToParse.txt","r");
- *		assertNotNullMsg("cannot open the file!\n",f);
+ *		kct_assertNotNullMsg("cannot open the file!\n",f);
  *	\endcode
  *
  *	Smaller and more readable, right? Koldar C Tester let you use a lot of these assertions:
@@ -310,7 +310,7 @@
 
 
 /**This macro allows you to change the default string that is printed out after the developer message
- * in the event a test fails. This string will printed only when macro functions like assertEqualXXXMsg()
+ * in the event a test fails. This string will printed only when macro functions like kct_assertEqualXXXMsg()
  * are called; the macro isn't influenting failMsg() or AssertCondMsg() assertion like!
  *
  * If you want to change the default value, define KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
@@ -343,7 +343,7 @@
 #endif
 
 /**This macro allows you to change the default string that is printed out after the developer message
- * in the event a test fails. This string will printed only when macro functions like assertEqualXXXMsg()
+ * in the event a test fails. This string will printed only when macro functions like kct_assertEqualXXXMsg()
  * are called; the macro isn't influenting failMsg() or AssertCondMsg() assertion like!
  *
  * If you want to change the default value, define KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
@@ -376,7 +376,7 @@
 #endif
 
 /**This macro allows you to change the default size of the buffer used to convert values into strings.
- * The buffer is useful only in assertions like assertEqualXXXMsg().
+ * The buffer is useful only in assertions like kct_assertEqualXXXMsg().
  *
  * \note {The default value is 15}
  *
@@ -901,16 +901,16 @@ static TestListElement* currentTest;
 	return;
 
 
-/**\brief end the test as a failure if the condition is *not* met
+/**\brief end the test as a failure if the condition is <b>not</b> met
  *
  *  @param condition represents the condition to be tested
  */
-#define assertCondition(condition) \
+#define kct_assertCondition(condition) \
 	if ((condition)==false){ \
 		fail(); \
 	}
 
-/**\brief end the test as a failure if the condition IS *not* met
+/**\brief end the test as a failure if the condition IS <b>not</b> met
  *
  * In addition to end the test if condition is *not* met, this
  * function will display an error message.
@@ -919,24 +919,36 @@ static TestListElement* currentTest;
  * 	is not met
  * @param condition represents the condition to be test
  */
-#define assertConditionMsg(message,condition) \
+#define kct_assertConditionMsg(message,condition) \
 	if ((condition)==false){ \
 		failMsg(message); \
 	}
 
-//TODO documentation
-#define assertNotCondition(condition) \
+/**\brief end the test as a failure if the condition is met
+ *
+ *  @param condition represents the condition to be tested
+ */
+#define kct_assertNotCondition(condition) \
 	if ((condition)==true){ \
 		fail(); \
 	}
 
-//TODO documentation
-#define assertNotConditionMsg(message,condition) \
+/**\brief end the test as a failure if the condition IS <b>not</b> met
+ *
+ * In addition to end the test if condition is met, this
+ * function will display an error message.
+ *
+ * @param [char*]message represents the error message to be display if the condition
+ * 	is not met
+ * @param condition represents the condition to be test
+ */
+#define kct_assertNotConditionMsg(message,condition) \
 	if ((condtion)==true){ \
 		failMsg(message); \
 	}
 
-/**\brief Checks if 2 simple values are equal. If not, send an error
+/**\public
+ * \brief Checks if 2 simple values are equal. If not, send an error
  *
  * The function checks if 2 data are equal. If they are, nothing will happen.
  * If not, the 2 values are converted in string and a error message is thrown
@@ -974,27 +986,28 @@ static TestListElement* currentTest;
  * @param expected the value that the developer expects to get;
  * @param actual the very value received
  */
-#define assertEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
-	type intexpected=(expected); \
-	type intactual=(actual); \
-	if ((intactual)!=(intexpected)){ \
-		char* str_exp; \
-		char* str_act; \
-		PRIVATE_KCT_INITSTRING(str_exp,intexpected,conversion); \
-		PRIVATE_KCT_INITSTRING(str_act,intactual,conversion); \
+#define kct_assertEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
+	type private_kct_variable_kct_assertEqualPrimitiveMsg_intexpected=(expected); \
+	type private_kct_variable_kct_assertEqualPrimitiveMsg_intactual=(actual); \
+	if ((private_kct_variable_kct_assertEqualPrimitiveMsg_intactual)!=(private_kct_variable_kct_assertEqualPrimitiveMsg_intexpected)){ \
+		char* private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp; \
+		char* private_kct_variable_kct_assertEqualPrimitiveMsg_str_act; \
+		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp,private_kct_variable_kct_assertEqualPrimitiveMsg_intexpected,conversion); \
+		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_act,private_kct_variable_kct_assertEqualPrimitiveMsg_intactual,conversion); \
 		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
 			message, \
 			KCT_ERRORMESSAGE_EXPECTED, \
-			str_exp, \
+			private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp, \
 			KCT_ERRORMESSAGE_ACTUAL, \
-			str_act); \
-		PRIVATE_KCT_FREESTRING(str_exp); \
-		PRIVATE_KCT_FREESTRING(str_act); \
+			private_kct_variable_kct_assertEqualPrimitiveMsg_str_act); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_act); \
 		fail(); \
 	} \
 }
 
-/**\brief Checks if 2 simple values are not equal. If not, send an error
+/**\public
+ * \brief Checks if 2 simple values are not equal. If not, send an error
  *
  * The function checks if 2 data are different. If they are, nothing will happen.
  * If not, the 2 values are converted in string and a error message is thrown
@@ -1032,22 +1045,22 @@ static TestListElement* currentTest;
  * @param expected the value that the developer expects to get;
  * @param actual the very value received
  */
-#define assertNotEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
-	type intexpected=(expected); \
-	type intactual=(actual); \
-	if ((intactual)==(intexpected)){ \
-		char* str_exp; \
-		char* str_act; \
-		PRIVATE_KCT_INITSTRING(str_exp,intexpected,conversion); \
-		PRIVATE_KCT_INITSTRING(str_act,intactual,conversion); \
+#define kct_assertNotEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
+	type private_kct_variable_kct_assertNotEqualPrimitiveMsg_intexpected=(expected); \
+	type private_kct_variable_kct_assertNotEqualPrimitiveMsg_intactual=(actual); \
+	if ((private_kct_variable_kct_assertNotEqualPrimitiveMsg_intactual)==(private_kct_variable_kct_assertNotEqualPrimitiveMsg_intexpected)){ \
+		char* private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp; \
+		char* private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act; \
+		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp,private_kct_variable_kct_assertNotEqualPrimitiveMsg_intexpected,conversion); \
+		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act,private_kct_variable_kct_assertNotEqualPrimitiveMsg_intactual,conversion); \
 		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
 			message, \
 			KCT_ERRORMESSAGE_EXPECTED, \
-			str_exp, \
+			private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp, \
 			KCT_ERRORMESSAGE_ACTUAL, \
-			str_act); \
-		PRIVATE_KCT_FREESTRING(str_exp); \
-		PRIVATE_KCT_FREESTRING(str_act); \
+			private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act); \
 		fail(); \
 	} \
 }
@@ -1110,7 +1123,7 @@ static TestListElement* currentTest;
  *		px.y=4;
  *		py.x=5;
  *		py.y=5;
- *		assertEqualStructMsg(
+ *		kct_assertEqualStructMsg(
  *			"the 2 points are different!",
  *			Point,
  *			Point2String,
@@ -1148,20 +1161,20 @@ static TestListElement* currentTest;
  * @param expected the value that the developer expects to get;
  * @param actual the very value received
  */
-#define assertEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
-	type structexpected=expected; \
-	type structactual=actual; \
-	if (compareFunction(structexpected,structactual)!=0){ \
-		char* str_exp=toStringFunction(structexpected); \
-		char* str_act=toStringFunction(structactual); \
+#define kct_assertEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
+	type private_kct_variable_kct_assertEqualStructMsg_structexpected=expected; \
+	type private_kct_variable_kct_assertEqualStructMsg_structactual=actual; \
+	if (compareFunction(private_kct_variable_kct_assertEqualStructMsg_structexpected,private_kct_variable_kct_assertEqualStructMsg_structactual)!=0){ \
+		char* private_kct_variable_kct_assertEqualStructMsg_str_exp=toStringFunction(structexpected); \
+		char* private_kct_variable_kct_assertEqualStructMsg_str_act=toStringFunction(structactual); \
 		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
 			message, \
 			KCT_ERRORMESSAGE_EXPECTED, \
-			str_exp, \
+			private_kct_variable_kct_assertEqualStructMsg_str_exp, \
 			KCT_ERRORMESSAGE_ACTUAL, \
-			str_act); \
-		PRIVATE_KCT_FREESTRING(str_exp); \
-		PRIVATE_KCT_FREESTRING(str_act); \
+			private_kct_variable_kct_assertEqualStructMsg_str_act); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_exp); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_act); \
 		fail(); \
 	} \
 }
@@ -1224,7 +1237,7 @@ static TestListElement* currentTest;
  *		px.y=4;
  *		py.x=5;
  *		py.y=4;
- *		assertNotEqualStructMsg(
+ *		kct_assertNotEqualStructMsg(
  *			"the 2 points are equal!",
  *			Point,
  *			Point2String,
@@ -1262,25 +1275,74 @@ static TestListElement* currentTest;
  * @param expected the value that the developer expects to get;
  * @param actual the very value received
  */
-#define assertNotEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
-	type structexpected=expected; \
-	type structactual=actual; \
-	if (compareFunction(structexpected,structactual)==0){ \
-		char* str_exp=toStringFunction(structexpected); \
-		char* str_act=toStringFunction(structactual); \
+#define kct_assertNotEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
+	type private_kct_variable_kct_assertNotEqualStructMsg_structexpected=expected; \
+	type private_kct_variable_kct_assertNotEqualStructMsg_structactual=actual; \
+	if (compareFunction(private_kct_variable_kct_assertNotEqualStructMsg_structexpected,private_kct_variable_kct_assertNotEqualStructMsg_structactual)==0){ \
+		char* str_exp=toStringFunction(private_kct_variable_kct_assertNotEqualStructMsg_structexpected); \
+		char* str_act=toStringFunction(private_kct_variable_kct_assertNotEqualStructMsg_structactual); \
 		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
 			message, \
 			KCT_ERRORMESSAGE_EXPECTED, \
-			str_exp, \
+			private_kct_variable_kct_assertNotEqualStructMsg_str_exp, \
 			KCT_ERRORMESSAGE_ACTUAL, \
-			str_act); \
-		PRIVATE_KCT_FREESTRING(str_exp); \
-		PRIVATE_KCT_FREESTRING(str_act); \
+			private_kct_variable_kct_assertNotEqualStructMsg_str_act); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualStructMsg_str_exp); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualStructMsg_str_act); \
 		fail(); \
 	} \
 }
 
+/**\brief Checks if 2 pointers values are equal. If not, send an error
+ * \public
+ *
+ * The function checks if 2 pointers are equal. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li expected is a value of type void* (or a relative of it);
+ *  \li actual is a value of type void* (or a relative of it);
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param [void*]expected the value that the developer expects to get;
+ * @param [void*]actual the very value received
+ */
+#define kct_assertEqualPtrMsg(message,expected,actual) \
+	kct_assertEqualPrimitiveMsg(message,void*,"%p",expected,actual)
+
+/**\brief Checks if 2 pointer values are not equal. If not, send an error
+ * \public
+ *
+ * The function checks if 2 pointers are different. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li expected is a value of type void* (or a relative of it);
+ *  \li actual is a value of type void* (or a relative of it);
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param [void*]expected the value that the developer expects to get;
+ * @param [void*]actual the very value received
+ */
+#define kct_assertNotEqualPtrMsg(message,expected,actual) \
+	kct_assertNotEqualPrimitiveMsg(message,void*,"%p",expected,actual)
+
 /**\brief Checks if 2 integer values are equal. If not, send an error
+ * \public
  *
  * The function checks if 2 integer are equal. If they are, nothing will happen.
  * If not, the 2 values are converted in string and a error message is thrown
@@ -1300,10 +1362,11 @@ static TestListElement* currentTest;
  * @param [int]expected the value that the developer expects to get;
  * @param [int]actual the very value received
  */
-#define assertEqualIntMsg(message,expected,actual) \
-	assertEqualPrimitiveMsg(message,int,"%d",expected,actual)
+#define kct_assertEqualIntMsg(message,expected,actual) \
+	kct_assertEqualPrimitiveMsg(message,int,"%d",expected,actual)
 
 /**\brief Checks if 2 integer values are not equal. If not, send an error
+ * \public
  *
  * The function checks if 2 integer are different. If they are, nothing will happen.
  * If not, the 2 values are converted in string and a error message is thrown
@@ -1323,10 +1386,11 @@ static TestListElement* currentTest;
  * @param [int]expected the value that the developer expects to get;
  * @param [int]actual the very value received
  */
-#define assertNotEqualIntMsg(message,expected,actual) \
-	assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
+#define kct_assertNotEqualIntMsg(message,expected,actual) \
+	kct_assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
 
 /**\brief Checks if 2 float values are not equal. If not, send an error
+ * \public
  *
  * The function checks if 2 integer are equal. If they are, nothing will happen.
  * If not, the 2 values are converted in string and a error message is thrown
@@ -1346,10 +1410,11 @@ static TestListElement* currentTest;
  * @param [float]expected the value that the developer expects to get;
  * @param [float]actual the very value received
  */
-#define assertEqualFloatMsg(message,expected,actual) \
-	assertEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
+#define kct_assertEqualFloatMsg(message,expected,actual) \
+	kct_assertEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
 
 /**\brief Checks if 2 float values are not equal. If not, send an error
+ * \public
  *
  * The function checks if 2 float are different. If they are, nothing will happen.
  * If not, the 2 values are converted in string and a error message is thrown
@@ -1369,59 +1434,135 @@ static TestListElement* currentTest;
  * @param [float]expected the value that the developer expects to get;
  * @param [float]actual the very value received
  */
-#define assertNotEqualFloatMsg(message,expected,actual) \
-	assertNotEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
-
+#define kct_assertNotEqualFloatMsg(message,expected,actual) \
+	kct_assertNotEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
 //TODO documentation
-#define assertEqual(expected,actual) \
-	if ((expected)!=(actual)) { \
-		return false; \
-	}
 
+/**\brief test whether or not a pointer is NULL
+ * \public
+ *
+ * The assertion checks if the pointer passed as parameter is NULL or not.
+ * Nothing will happen if pointer is a value different from 0.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *
+ * @param [void*]pointer the pointer to test
+ */
 //TODO documentation
-#define assertEqualMsg(message,expected,actual) \
-	if ((expected)!=(actual)){ \
+#define kct_assertIsNotNull(pointer) { \
+	void* private_kct_variable_kct_assertIsNotNull=(pointer); \
+	if (private_kct_variable_kct_assertIsNotNull==NULL){ \
+		fail(); \
+	} \
+}
+
+/**\brief test whether or not a pointer is NULL
+ * \public
+ *
+ * The assertion checks if the pointer passed as parameter is NULL or not.
+ * Nothing will happen if pointer is a value different from 0.
+ * The string message will be shown if the pointer is 0.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *
+ * @param [void*]pointer the pointer to test
+ */
+//TODO documentation
+#define kct_assertIsNotNullMsg(message,pointer) { \
+	void* private_kct_variable_kct_assertIsNotNullMsg=(pointer); \
+	if (private_kct_variable_kct_assertIsNotNullMsg==NULL){ \
 		failMsg(message); \
-	}
+	} \
+}
 
+/**\brief test whether or not a pointer is not NULL
+ * \public
+ *
+ * The assertion checks if the pointer passed as parameter is not NULL.
+ * Nothing will happen if pointer is a value equal from 0.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *
+ * @param [void*]pointer the pointer to test
+ */
 //TODO documentation
-#define assertNotEqual(expected,actual) \
-	if ((expected)==(actual)) { \
+#define kct_assertIsNull(pointer) { \
+	void* private_kct_variable_kct_assertIsNull=(pointer); \
+	if (private_kct_variable_kct_assertIsNull!=NULL){ \
 		fail(); \
 	}
 
+/**\brief test whether or not a pointer is not NULL
+ * \public
+ *
+ * The assertion checks if the pointer passed as parameter is not NULL.
+ * Nothing will happen if pointer is a value equal from 0.
+ * A message will be shown if the pointer is not NULL.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *  \li message must be char* typed;
+ *
+ * @param [void*]pointer the pointer to test
+ * @param [char*]message the message to show if the pointer is not NULL
+ */
 //TODO documentation
-#define assertNotEqualMsg(message,expected,actual) \
-	if ((expected)==(actual)) { \
+#define kct_assertIsNullMsg(message,pointer) { \
+	void* private_kct_variable_kct_assertIsNullMsg=(pointer); \
+	if (private_kct_variable_kct_assertIsNullMsg!=NULL){ \
 		failMsg(message); \
-	}
+	} \
+}
 
+/**\brief checks if a value is in a given interval
+ *
+ * The assertion allows you to check if a value (integer of float it doesn't matter)
+ * is inside a certain interval. The macro supports all the type of interval:
+ *
+ * -* both interval inf and sup are <b>not</b> included in the interval itself: for example
+ * 	5 is not in the interval \f$]3;5[\f$
+ * -* only the interval inf is included in the interval: for example
+ * 	5 is in the interval \f$[5;7[\f$
+ * -* only the interval sup is cinluded in the interval: for example
+ * 	5 is in the interval \f$]3;5]\f$
+ * -* both interval inf and sup are included in the interval: for example
+ * 	5 is in the interval \f$[3;5]\f$
+ *
+ * \pre
+ *  \li lowerbound is an numeric (integer or float);
+ *  \li upperbound is an numeric (integer or float);
+ *  \li actualbound is an numeric (integer or float);
+ *  \li lowin is a bool;
+ *  \li upin is a bool;
+ *  \li lowerbound is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li upperbound is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li actualbound is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li lowin is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li upin is a non randomic value (it is not a function who is not deterministic for example);
+ *
+ *	The non randomic precondition is particular important: the macro will <b>NOT</b> behave
+ *	correctly if you code:
+ *	\code
+ *		kct_assertExtremis(3,5,true,true,rand()%6); //wrong way to do it
+ *	\endcode
+ *
+ *	You shoudl do instead:
+ *	\code
+ *		int a=rand()%6;
+ *		kct_assertExtremis(3,5,true,true,a); //correct way to do it
+ *	\endcode
+ *
+ * @param lowerbound the inf of interval
+ * @param upperbound the sup of the interval
+ * @param lowin TRUE if the inf is included in the interval
+ * @param upin TRUE if the sup is included in the interval
+ * @actual the value to check if is contained between lowerbound and upperbound
+ */
 //TODO documentation
-#define assertNotNull(pointer) \
-	if (pointer==NULL){ \
-		fail(); \
-	}
-
-//TODO documentation
-#define assertNotNullMsg(message,pointer) \
-	if (pointer==NULL){ \
-		failMsg(message); \
-	}
-
-//TODO documentation
-#define assertIsNull(pointer) \
-	if (pointer!=NULL){ \
-		fail(); \
-	}
-
-//TODO documentation
-#define assertIsNullMsg(message,pointer) \
-	if (pointer!=NULL){ \
-		failMsg(message); \
-	}
-
-//TODO documentation
-#define assertExtremis(lowerbound,upperbound,lowin,upin,actual) \
+#define kct_assertExtremis(lowerbound,upperbound,lowin,upin,actual) { \
 	if (actual<lowerbound){ \
 		fail(); \
 	} \
@@ -1435,9 +1576,53 @@ static TestListElement* currentTest;
 		fail(); \
 	}
 
-//FIXME lowerbound,upperbound,lowin,upin,actual must be stored in variable... if they has random components, the test is ill!
-//TODO documentation
-#define assertExtremisMsg(message,lowerbound,upperbound,lowin,upin,actual) \
+/**\brief checks if a value is in a given interval
+ *
+ * The assertion allows you to check if a value (integer of float it doesn't matter)
+ * is inside a certain interval. The macro supports all the type of interval:
+ *
+ * -* both interval inf and sup are <b>not</b> included in the interval itself: for example
+ * 	5 is not in the interval \f$]3;5[\f$
+ * -* only the interval inf is included in the interval: for example
+ * 	5 is in the interval \f$[5;7[\f$
+ * -* only the interval sup is cinluded in the interval: for example
+ * 	5 is in the interval \f$]3;5]\f$
+ * -* both interval inf and sup are included in the interval: for example
+ * 	5 is in the interval \f$[3;5]\f$
+ *
+ * \pre
+ *  \li lowerbound is an numeric (integer or float);
+ *  \li upperbound is an numeric (integer or float);
+ *  \li actualbound is an numeric (integer or float);
+ *  \li lowin is a bool;
+ *  \li upin is a bool;
+ *  \li message is a char*;
+ *  \li lowerbound is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li upperbound is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li actualbound is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li lowin is a non randomic value (it is not a function who is not deterministic for example);
+ *  \li upin is a non randomic value (it is not a function who is not deterministic for example);
+ *
+ *	The non randomic precondition is particular important: the macro will <b>NOT</b> behave
+ *	correctly if you code:
+ *	\code
+ *		kct_assertExtremis(3,5,true,true,rand()%6); //wrong way to do it
+ *	\endcode
+ *
+ *	You shoudl do instead:
+ *	\code
+ *		int a=rand()%6;
+ *		kct_assertExtremis(3,5,true,true,a); //correct way to do it
+ *	\endcode
+ *
+ * @param [char*]message the message to show if actual is not in the interval
+ * @param lowerbound the inf of interval
+ * @param upperbound the sup of the interval
+ * @param [bool]lowin TRUE if the inf is included in the interval
+ * @param [bool]upin TRUE if the sup is included in the interval
+ * @actual the value to check if is contained between lowerbound and upperbound
+ */
+#define kct_assertExtremisMsg(message,lowerbound,upperbound,lowin,upin,actual) \
 	if (actual<lowerbound){ \
 		failMsg(message); \
 	} \
