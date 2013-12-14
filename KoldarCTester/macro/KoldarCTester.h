@@ -1,6 +1,7 @@
 /**\file
  *
  */
+
 /**
  * \mainpage Koldar C Tester: a simple C tester
  * 
@@ -52,21 +53,23 @@
  *	 Basically KoldarCTester is a function list manager: you create some function and then you use
  *	 some header function to add them in a list. After that you can execute them all in one command: the
  *	 header handles all the work for you.
- *	 So, first of all, you can create a new file (call it TestInteger.c fro example) and include the header:
+ *	 So, first of all, you can create a new file (call it TestInteger.c for example) and include the header:
  *
  *	 \code
  *	 	#include "KoldarCTester.h"
  *	 \endcode
  *
- *	 You have to be sure the header is inside in your "include paths" (maybe through the -I compiler directive)
- *	 Secondly you have to create some test functions. For the example, I have created these:
+ *	 You have to be sure the header is inside in your "include paths" (maybe through the -I compiler directive).
+ *	 Secondly you have to create some test functions. For example, I have created these:
  *
  *	 \code
  *	 	//Create 100 random number between 0 and 9 and test whether or
  *	 	//not the upper and lower bound are not violated.
  *	 	void testRandomX(){
  *			int i;
+ *			int n;
  *			for (i=0;i<100;i++){
+ *				n=rand()%10;
  *				kct_assertExtremis(0,9,true,true,rand()%10);
  *			}
  *	 	}
@@ -83,7 +86,7 @@
  *	 \endcode
  *
  *	 Let's skip up for the moment the "kct_assertExtremis" and "kct_assertCondition" part. Now you have created
- *	 all the test you need to verify some feature of your program. Now you need to run these; the main
+ *	 all the test you need to verify some feature of your program. Now you need to run these tests... how? The main
  *	 function does exactly that:
  *
  *	 \code
@@ -106,13 +109,13 @@
  *	 (like Bjame Stroudtrup say in http://www.youtube.com/watch?v=YQs6IC-vgmo),
  *	 the list are quite easy to understand even for programmers beginner, so everyone
  *	 can improve freely the header. Moreover, unlike other test suite, this header
- *	 is totally *free of memory leak*. Sure, you can say:
+ *	 is totally <b>free of memory leak</b>. Sure, you can say:
  *	 "well, that's should be obvious!"; well, of course it is, but you'll never
  *	 know what you download out in the internet.
  *
  *	\section section04 Basic Elements in the header
  *
- *	In the header there are basically  important elements:
+ *	In the header there are basically 6 important elements:
  *	 -# assertions;
  *	 -# function kct_addTest();
  *	 -# function kct_addTestImproved();
@@ -125,17 +128,17 @@
  *
  *	 "currentTest" is the test that is running at the moment; it is mainly
  *	 used to lighten the prototype of the function: in this way the developer
- *	 can *focus* on the test development insted of wasting time on understand the
+ *	 can <b>focus</b> on the test development insted of wasting time on understand the
  *	 testing suite.
  *
  *	 kct_addTest() is the main function used to add a function in the list.
  *
- *	 kct_addTestImproved() has the same aim of kct_addTest but with this function
+ *	 kct_addTestImproved() has the same aim of kct_addTest() but with this function
  *	 you can also specify whether or not you want to skip the function.
  *
  *	 kct_runAllTest() is obviously used to execute the test. Note that with this function
  *	 the list is automatically deallocated from the heap: in this way, if you are
- *	 testing memory leak in your code, Koldar C Tester will not produces memory leaks by himself.
+ *	 testing memory leak in your code, Koldar C Tester will not produces memory leaks by itself.
  *
  *	\section section05 Assertion
  *
@@ -293,15 +296,16 @@
  * \image html image02.png
  *
  *
- * \warning{
+ * \warning
  * 	To enable this custom behaviour, define KCT_CONTROLMACRO_TESTSEPARATOR <b>before</b>
  * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
  * 	enabled.
- * }
+ *
  */
 #ifndef KCT_CONTROLMACRO_TESTSEPARATOR
-/**\brief Represents the string that separates 2 test function in the output
- *
+/**
+ * \brief Represents the string that separates 2 test function in the output
+ * \private
  */
 #	define KCT_TESTSEPARATOR "**************"
 #else
@@ -322,19 +326,20 @@
  *
  * The default value is: "\nExpected value: ".
  *
- * \warning{
+ * \warning
  * 	To enable this custom behaviour, define KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED <b>before</b>
  * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
  * 	enabled.
- * }
+ *
  *
  */
 #ifndef KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
 	/**\brief Represents the string to print before the expected value in the error message
-	 *
+	 * \private
+	 * 
 	 * The syntax of the error message is shown here:
 	 *
-	 * !!!ERROR!!! <errorMessage> <KCT_ERRORMESSAGE_EXPECTED> <value expected> <KCT_ERRORMESSAGE_ACTUAL> <actual value>
+	 * !!!ERROR!!! errorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
 	 *
 	 */
 #	define KCT_ERRORMESSAGE_EXPECTED "\nExpected value: "
@@ -355,19 +360,20 @@
  *
  * The default value is: "\nActual value: ".
  *
- * \warning{
+ * \warning
  * 	To enable this custom behaviour, define KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL <b>before</b>
  * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
  * 	enabled.
- * }
+ *
  *
  */
 #ifndef KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
-	/**\brief Represents the string to print before the actual value in the error message
+	/**\private
+	 * \brief Represents the string to print before the actual value in the error message
 	 *
 	 * The syntax of the error message is shown here:
 	 *
-	 * !!!ERROR!!! <errorMessage> <KCT_ERRORMESSAGE_EXPECTED> <value expected> <KCT_ERRORMESSAGE_ACTUAL> <actual value>
+	 * !!!ERROR!!! errorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
 	 *
 	 */
 #	define KCT_ERRORMESSAGE_ACTUAL "\nActual value: "
@@ -384,14 +390,15 @@
  * longer than 15 the header will stringify will wrongly. By defining this custom value,
  * you can easily increase the buffer size, solving the problem.
  *
- * \warning{
+ * \warning
  * 	To enable this custom behaviour, define KCT_CONTROLMACRO_STRINGBUFFER <b>before</b>
  * 	including KoldarCTester header. In alternative, you may compile your test suite with a "-D" flag
  * 	enabled.
- * }
+ *
  */
 #ifndef KCT_CONTROLMACRO_STRINGBUFFER
-	/**Represents the size of the buffer used to convert number (float or integer it doesn't matter)
+	/**\private
+	 * Represents the size of the buffer used to convert number (float or integer it doesn't matter)
 	 * to strings. The constant is mainly used in the macros like PRIVATE_KCT_ITOA or PRIVATE_KCT_FTOA
 	 */
 #	define KCT_STRINGBUFFER 15
@@ -403,7 +410,8 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@ STRUCTURES DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-/**\brief type of a generic test function.
+/**\private
+ * \brief type of a generic test function.
  *
  * Every test function that has to be added as a test function must have the following prototype:
  *  -* no formal parameters;
@@ -411,7 +419,8 @@
  */
 typedef void (*TestFunction)(void);
 
-/**\struct TestListElement
+/**\private
+ * \struct TestListElement
  * \brief Defines a single element of the list.
  *
  */
@@ -449,7 +458,8 @@ typedef struct TestListElement {
 	struct TestListElement* next;
 } TestListElement;
 
-/**\struct TestList
+/**\private
+ * \struct TestList
  * \brief Represents the entire list of test functions
  *
  */
@@ -475,24 +485,29 @@ typedef struct TestList {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PRIVATE MACRO DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-/**\brief Represents the outcome of a test function when the test utterly fails
+/**\private
+ * \brief Represents the outcome of a test function when the test utterly fails
  *
  */
 #define PRIVATE_KCT_FAIL 0
-/**\brief Represents the outcome of a test function when the test terminates successfully
+/**\private
+ * \brief Represents the outcome of a test function when the test terminates successfully
  *
  */
 #define PRIVATE_KCT_SUCCESS 1
-/**\brief Represents the outcome of a test function when the test was to be skipped
+/**\private
+ * \brief Represents the outcome of a test function when the test was to be skipped
  *
  */
 #define PRIVATE_KCT_SKIPPED 2
-/**\brief Represents the outcome of a test function that has not yet been executed
+/**\private
+ * \brief Represents the outcome of a test function that has not yet been executed
  *
  */
 #define PRIVATE_KCT_UNKNOWN 3
 
-/**\brief copy a string in another one
+/**\private
+ * \brief copy a string in another one
  *
  * It it highly suggested that constantString is a constant String or
  * a simple variable. It is not recommended to use as "constantString" a call to
@@ -516,12 +531,13 @@ typedef struct TestList {
 	} \
 	strcpy((char*)destinationpointer,constantString)
 
-/**\brief convert an integer to string
+/**\private
+ * \brief convert an integer to string
  *
- * \warning {
+ * \warning
  * 	It is highly recommended that you use as "string" parameter only a
  * 	simple variable. Complex formula might cause instabilities
- * }
+ *
  *
  * Some example of this function use might be:
  * \code
@@ -556,12 +572,13 @@ typedef struct TestList {
 	string=malloc(KCT_STRINGBUFFER); \
 	sprintf(string,conversion,num);
 
-/**\brief free an already allocated string
+/**\private
+ * \brief free an already allocated string
  *
- * \warning {
+ * \warning
  * 	It is highly recommended that you use as "string" parameter only a
  * 	simple variable. Complex formula might cause instabilities
- * }
+ *
  *
  * \pre
  *  \li string was allocated with PRIVATE_KCT_INITSTRING;
@@ -574,7 +591,8 @@ typedef struct TestList {
 #define PRIVATE_KCT_FREESTRING(string) \
 	free(string);
 
-/**\brief compose a new string by concatenating all the strings in the the give array
+/**\private
+ * \brief compose a new string by concatenating all the strings in the the give array
  *
  * \pre
  *  \li destination must be a char*
@@ -598,7 +616,8 @@ typedef struct TestList {
 
 
 
-/**\brief constructs an empty test list
+/**\private
+ * \brief constructs an empty test list
  *
  * It is highly recommended that you put in list a single variable, not a function
  * returning a TestList*
@@ -624,7 +643,8 @@ typedef struct TestList {
 	list->tail=NULL; \
 	list->size=0
 
-/**\brief Create a new TestListElement in the memory
+/**\private
+ * \brief Create a new TestListElement in the memory
  *
  * \pre
  *  \li element has to be of type TestListElement*;
@@ -656,7 +676,8 @@ typedef struct TestList {
 	element->skip=!toberun; \
 	element->next=NULL
 
-/**\brief adds a new test function in the test list
+/**\private
+ * \brief adds a new test function in the test list
  *
  * The variable list is best not to be a complex formula, but a simple variable:
  * in this way the macro function is way quicker
@@ -691,7 +712,8 @@ typedef struct TestList {
 	_list->size++; \
 }
 
-/**\brief free the memory occupied by the list.
+/**\private
+ * \brief free the memory occupied by the list.
  *
  * \pre
  *  \li _list not NULL;
@@ -714,7 +736,8 @@ typedef struct TestList {
 	free(_list); \
 }
 
-/**@brief run all the test in the list
+/**\private
+ * @brief run all the test in the list
  *
  * \pre
  *  \li _f open in write mode;
@@ -803,7 +826,8 @@ typedef struct TestList {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ VARIABLE USED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-/**Represents the list holding every test.
+/**\private
+ * Represents the list holding every test.
  * This variable is used to simplify the MACRO prototype
  */
 TestList* testList=NULL;
@@ -811,16 +835,18 @@ TestList* testList=NULL;
  * if you have 2 parallel executing lists, with this variable you can't obvously keep
  * trace on what test the 2 lists are executing!
  */
-/**Represents the test which is currently running
+/**\private
+ * Represents the test which is currently running
  *
  */
-static TestListElement* currentTest;
+TestListElement* currentTest;
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@ PUBLIC MACRO DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-/**\brief adds a new function in the test list
+/**\public
+ * \brief adds a new function in the test list
  *
  * \pre
  *  \li function has already been defined;
@@ -840,7 +866,8 @@ static TestListElement* currentTest;
 	} \
 	PRIVATE_KCT_ADDTESTCASE(testList,function,#function,torun)
 
-/**\brief adds a new function in the test list
+/**\public
+ * \brief adds a new function in the test list
  *
  * \pre
  *  \li function has already been defined;
@@ -854,7 +881,8 @@ static TestListElement* currentTest;
 #define kct_addTest(function) \
 	kct_addTestImproved(function,true)
 
-/**\brief run all the test added to the test list.
+/**\public
+ * \brief run all the test added to the test list.
  *
  * The function run all the tests which has been added to the test list.
  * You can add test function in the test list with the function kct_addTest().
@@ -876,14 +904,16 @@ static TestListElement* currentTest;
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-/**\brief Terminate the test and set the result of it as a failure.
+/**\public
+ * \brief Terminate the test and set the result of it as a failure.
  *
  */
 #define fail() \
 	currentTest->result=PRIVATE_KCT_FAIL; \
 	return;
 
-/**\brief Terminate the test and set the result of it as a failure.
+/**\public
+ * \brief Terminate the test and set the result of it as a failure.
  *
  * @param [char*]message represents the message to
  * 	display just before the ending of the test.
@@ -894,14 +924,16 @@ static TestListElement* currentTest;
 	currentTest->result=PRIVATE_KCT_FAIL; \
 	return;
 
-/**\brief terminates successfully the current test
+/**\public
+ * \brief terminates successfully the current test
  *
  */
 #define ok() \
 	return;
 
 
-/**\brief end the test as a failure if the condition is <b>not</b> met
+/**\public
+ * \brief end the test as a failure if the condition is <b>not</b> met
  *
  *  @param condition represents the condition to be tested
  */
@@ -910,9 +942,10 @@ static TestListElement* currentTest;
 		fail(); \
 	}
 
-/**\brief end the test as a failure if the condition IS <b>not</b> met
+/**\public
+ * \brief end the test as a failure if the condition IS <b>not</b> met
  *
- * In addition to end the test if condition is *not* met, this
+ * In addition to end the test if condition is <b>not</b> met, this
  * function will display an error message.
  *
  * @param [char*]message represents the error message to be display if the condition
@@ -924,7 +957,8 @@ static TestListElement* currentTest;
 		failMsg(message); \
 	}
 
-/**\brief end the test as a failure if the condition is met
+/**\public
+ * \brief end the test as a failure if the condition is met
  *
  *  @param condition represents the condition to be tested
  */
@@ -933,7 +967,8 @@ static TestListElement* currentTest;
 		fail(); \
 	}
 
-/**\brief end the test as a failure if the condition IS <b>not</b> met
+/**\public
+ * \brief end the test as a failure if the condition is met
  *
  * In addition to end the test if condition is met, this
  * function will display an error message.
@@ -969,9 +1004,9 @@ static TestListElement* currentTest;
  *  \li pointer variations (check the very pointers, not the structure pointed by them);
  *  \li enumerations;
  *
- * \warning {While string and structure can be inserted as values to be checked,
+ * \warning While string and structure can be inserted as values to be checked,
  * the function can't compare them with ease. If you have to compare strings or structures,
- * please use PRIVATE_KCT_ASSERTSTRINGEQUAL or PRIVATE_KCT_ASSERTSTRUCTEQUAL}
+ * please use PRIVATE_KCT_ASSERTSTRINGEQUAL or PRIVATE_KCT_ASSERTSTRUCTEQUAL
  *
  * \pre
  *  \li message is of type char* (or a string);
@@ -1028,9 +1063,9 @@ static TestListElement* currentTest;
  *  \li pointer variations (check the very pointers, not the structure pointed by them);
  *  \li enumerations;
  *
- * \warning {While stirng and structure can be inserted as values to be checked,
+ * \warning While stirng and structure can be inserted as values to be checked,
  * the function can't compare them with ease. If you have to compare strings or structures,
- * please use PRIVATE_KCT_ASSERTSTRINGEQUAL or PRIVATE_KCT_ASSERTSTRUCTEQUAL}
+ * please use PRIVATE_KCT_ASSERTSTRINGEQUAL or PRIVATE_KCT_ASSERTSTRUCTEQUAL
  *
  * \pre
  *  \li message is of type char* (or a string);
@@ -1179,119 +1214,9 @@ static TestListElement* currentTest;
 	} \
 }
 
-/**\public
- * \brief Checks if 2 structured data are different. If not, send an error
- *
- * The function checks if 2 structure data are different. If they are, nothing will happen.
- * If not, the 2 values are converted in string and a error message is thrown
- * at the user. The error is so composed:
- *  -# message parameter;
- *  -# KCT_ERRORMESSAGE_EXPECTED;
- *  -# expected parameter converted into string;
- *  -# KCT_ERRORMESSAGE_ACTUAL;
- *  -# actual parameter converted into string;
- *
- * The function can easily manage structure data (typedef struct). To do so,
- * however, it needs 2 functions:
- *  \li a compare function: this function takes 2 structure value of the same type
- *  	and checks if they are equal; if they are, the function returns 0, otherwise it returns a
- *  	non zero value. Note that the function can be much complex than a equal/different function:
- *  	like strcmp(), it might returns a negative number if the first struct has a less value than the second and/or
- *  	a positive number if the first structure has a greater value than the second one. The important stuff is
- *  	that it returns 0 if the 2 given structs are equal.
- *  \li a string conversion functions: the function has to take only one parameter, the structure to stringify and
- *  	must return a char*. Moreover, <b>it must allocate a new string</b>: this is mandatory because
- *  	the function will automatically free the char pointer returned by the function.
- *
- * \warning {While primitive types can be inserted as values to be checked,
- * the function can't compare them with ease. If you have to compare strings or structures,
- * please use PRIVATE_KCT_ASSERTINTEQUAL or similar}
- *
- * An example of the use of this function:
- * \code
- *	typedef struct Point {
- *		int x;
- *		int y;
- *	} Point;
- *
- *	char* Point2String(Point p){
- *		char* buffer=malloc(100);
- *		sprintf(buffer,"(%d %d)",p.x,p.y);
- *		return buffer;
- *	}
- *
- *	int comparePoints(Point p1,Point p2){
- *		if (p1.x!=p2.x){
- *			return 1;
- *		}
- *		if (p1.y!=p2.y){
- *			return 1;
- *		}
- *		return 0;
- *	}
- *
- *	void testOK(){
- *		Point px;
- *		Point py;
- *		px.x=5;
- *		px.y=4;
- *		py.x=5;
- *		py.y=4;
- *		kct_assertNotEqualStructMsg(
- *			"the 2 points are equal!",
- *			Point,
- *			Point2String,
- *			comparePoints,
- *			px,
- *			py);
- *	}
- *
- *	int main(){
- *		kct_addTest(testOK);
- *		kct_runAllTest(stdout);
- *		return 0;
- *	}
- * \endcode
- *
- * \pre
- *  \li message is of type char* (or a string);
- *  \li type is a struct type;
- *  \li toStringFunction is a name of a declared function;
- *  \li toStringFunction takes only one parameter of type "type";
- *  \li toStringFunction return a char*;
- *  \li toStringFunction allocates a new string in the heap representing the struct given;
- *  \li compareFunction is a name of a declared function;
- *  \li compareFunction takes only 2 paramters of type "type";
- *  \li compareFunction returns 0 or another value;
- *  \li compareFunction must return 0 if the 2 values are equal;
- *  \li compareFunction must return any other value beside 0 if the 2 values are different;
- *  \li expected is a value of type type;
- *  \li actual is a value of type type;
- *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param type represents the type of expected and actual values and the type
- * 	of the parameters of the functions toStringFunction and compareFunction;
- * @param toStringFunction represents the name
- * @param expected the value that the developer expects to get;
- * @param actual the very value received
- */
-#define kct_assertNotEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
-	type private_kct_variable_kct_assertNotEqualStructMsg_structexpected=expected; \
-	type private_kct_variable_kct_assertNotEqualStructMsg_structactual=actual; \
-	if (compareFunction(private_kct_variable_kct_assertNotEqualStructMsg_structexpected,private_kct_variable_kct_assertNotEqualStructMsg_structactual)==0){ \
-		char* str_exp=toStringFunction(private_kct_variable_kct_assertNotEqualStructMsg_structexpected); \
-		char* str_act=toStringFunction(private_kct_variable_kct_assertNotEqualStructMsg_structactual); \
-		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
-			message, \
-			KCT_ERRORMESSAGE_EXPECTED, \
-			private_kct_variable_kct_assertNotEqualStructMsg_str_exp, \
-			KCT_ERRORMESSAGE_ACTUAL, \
-			private_kct_variable_kct_assertNotEqualStructMsg_str_act); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualStructMsg_str_exp); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualStructMsg_str_act); \
-		fail(); \
-	} \
-}
+//TODO documentation
+#define assertNotEqualIntMsg(message,expected,actual) \
+	assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
 
 /**\brief Checks if 2 pointers values are equal. If not, send an error
  * \public
@@ -1436,7 +1361,6 @@ static TestListElement* currentTest;
  */
 #define kct_assertNotEqualFloatMsg(message,expected,actual) \
 	kct_assertNotEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
-//TODO documentation
 
 /**\brief test whether or not a pointer is NULL
  * \public
@@ -1449,7 +1373,6 @@ static TestListElement* currentTest;
  *
  * @param [void*]pointer the pointer to test
  */
-//TODO documentation
 #define kct_assertIsNotNull(pointer) { \
 	void* private_kct_variable_kct_assertIsNotNull=(pointer); \
 	if (private_kct_variable_kct_assertIsNotNull==NULL){ \
@@ -1469,7 +1392,6 @@ static TestListElement* currentTest;
  *
  * @param [void*]pointer the pointer to test
  */
-//TODO documentation
 #define kct_assertIsNotNullMsg(message,pointer) { \
 	void* private_kct_variable_kct_assertIsNotNullMsg=(pointer); \
 	if (private_kct_variable_kct_assertIsNotNullMsg==NULL){ \
@@ -1488,7 +1410,6 @@ static TestListElement* currentTest;
  *
  * @param [void*]pointer the pointer to test
  */
-//TODO documentation
 #define kct_assertIsNull(pointer) { \
 	void* private_kct_variable_kct_assertIsNull=(pointer); \
 	if (private_kct_variable_kct_assertIsNull!=NULL){ \
@@ -1509,7 +1430,6 @@ static TestListElement* currentTest;
  * @param [void*]pointer the pointer to test
  * @param [char*]message the message to show if the pointer is not NULL
  */
-//TODO documentation
 #define kct_assertIsNullMsg(message,pointer) { \
 	void* private_kct_variable_kct_assertIsNullMsg=(pointer); \
 	if (private_kct_variable_kct_assertIsNullMsg!=NULL){ \
@@ -1561,7 +1481,6 @@ static TestListElement* currentTest;
  * @param upin TRUE if the sup is included in the interval
  * @actual the value to check if is contained between lowerbound and upperbound
  */
-//TODO documentation
 #define kct_assertExtremis(lowerbound,upperbound,lowin,upin,actual) { \
 	if (actual<lowerbound){ \
 		fail(); \
