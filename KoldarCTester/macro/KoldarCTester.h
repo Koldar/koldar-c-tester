@@ -260,6 +260,7 @@
  * \version 1.0
  */
 
+
 #ifndef KOLDARCTESTER_H_
 #define KOLDARCTESTER_H_
 
@@ -307,9 +308,9 @@
  * \brief Represents the string that separates 2 test function in the output
  * \private
  */
-#	define KCT_TESTSEPARATOR "**************"
+#	define PRIVATE_KCT_TESTSEPARATOR "**************"
 #else
-#	define KCT_TESTSEPARATOR KCT_CONTROLMACRO_TESTSEPARATOR
+#	define PRIVATE_KCT_TESTSEPARATOR KCT_CONTROLMACRO_TESTSEPARATOR
 #endif
 
 
@@ -342,9 +343,9 @@
 	 * !!!ERROR!!! errorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
 	 *
 	 */
-#	define KCT_ERRORMESSAGE_EXPECTED "\nExpected value: "
+#	define PRIVATE_KCT_ERRORMESSAGE_EXPECTED "\nExpected value: "
 #else
-#	define KCT_ERRORMESSAGE_EXPECTED KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
+#	define PRIVATE_KCT_ERRORMESSAGE_EXPECTED KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
 #endif
 
 /**This macro allows you to change the default string that is printed out after the developer message
@@ -376,9 +377,9 @@
 	 * !!!ERROR!!! errorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
 	 *
 	 */
-#	define KCT_ERRORMESSAGE_ACTUAL "\nActual value: "
+#	define PRIVATE_KCT_ERRORMESSAGE_ACTUAL "\nActual value: "
 #else
-#	define KCT_ERRORMESSAGE_ACTUAL KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
+#	define PRIVATE_KCT_ERRORMESSAGE_ACTUAL KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
 #endif
 
 /**This macro allows you to change the default size of the buffer used to convert values into strings.
@@ -401,9 +402,9 @@
 	 * Represents the size of the buffer used to convert number (float or integer it doesn't matter)
 	 * to strings. The constant is mainly used in the macros like PRIVATE_KCT_ITOA or PRIVATE_KCT_FTOA
 	 */
-#	define KCT_STRINGBUFFER 15
+#	define PRIVATE_KCT_STRINGBUFFER 15
 #else
-#	define KCT_STRINGBUFFER KCT_CONTROLMACRO_STRINGBUFFER
+#	define PRIVATE_KCT_STRINGBUFFER KCT_CONTROLMACRO_STRINGBUFFER
 #endif
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -569,7 +570,7 @@ typedef struct TestList {
  *  @param num the integer number to convert
  */
 #define PRIVATE_KCT_INITSTRING(string,num,conversion) \
-	string=malloc(KCT_STRINGBUFFER); \
+	string=malloc(PRIVATE_KCT_STRINGBUFFER); \
 	sprintf(string,conversion,num);
 
 /**\private
@@ -767,7 +768,7 @@ typedef struct TestList {
 			continue; \
 		} \
 		currentTest=testToRun; \
-		fprintf(_f,"%s TEST \"%s\" %s\n",KCT_TESTSEPARATOR,testToRun->description,KCT_TESTSEPARATOR); \
+		fprintf(_f,"%s TEST \"%s\" %s\n",PRIVATE_KCT_TESTSEPARATOR,testToRun->description,PRIVATE_KCT_TESTSEPARATOR); \
 		fprintf(_f,"\n"); \
 		testToRun->testFunction(); \
 		if (testToRun->result == PRIVATE_KCT_UNKNOWN){ \
@@ -778,7 +779,7 @@ typedef struct TestList {
 		fprintf(_f,"\n"); \
 		testToRun=testToRun->next; \
 	} \
-	fprintf(_f,"%s FINAL RESULTS %s\n",KCT_TESTSEPARATOR,KCT_TESTSEPARATOR); \
+	fprintf(_f,"%s FINAL RESULTS %s\n",PRIVATE_KCT_TESTSEPARATOR,PRIVATE_KCT_TESTSEPARATOR); \
 	fprintf(_f,"\n"); \
 	testToRun=_list->head; \
 	testnumber=1; \
@@ -908,7 +909,7 @@ TestListElement* currentTest;
  * \brief Terminate the test and set the result of it as a failure.
  *
  */
-#define fail() \
+#define kct_fail() \
 	currentTest->result=PRIVATE_KCT_FAIL; \
 	return;
 
@@ -919,7 +920,7 @@ TestListElement* currentTest;
  * 	display just before the ending of the test.
  *
  */
-#define failMsg(message) \
+#define kct_failMsg(message) \
 	PRIVATE_KCT_COPYSTRING(currentTest->errorMessage,message); \
 	currentTest->result=PRIVATE_KCT_FAIL; \
 	return;
@@ -928,9 +929,8 @@ TestListElement* currentTest;
  * \brief terminates successfully the current test
  *
  */
-#define ok() \
+#define kct_ok() \
 	return;
-
 
 /**\public
  * \brief end the test as a failure if the condition is <b>not</b> met
@@ -939,7 +939,7 @@ TestListElement* currentTest;
  */
 #define kct_assertCondition(condition) \
 	if ((condition)==false){ \
-		fail(); \
+		kct_fail(); \
 	}
 
 /**\public
@@ -954,7 +954,7 @@ TestListElement* currentTest;
  */
 #define kct_assertConditionMsg(message,condition) \
 	if ((condition)==false){ \
-		failMsg(message); \
+		kct_failMsg(message); \
 	}
 
 /**\public
@@ -964,7 +964,7 @@ TestListElement* currentTest;
  */
 #define kct_assertNotCondition(condition) \
 	if ((condition)==true){ \
-		fail(); \
+		kct_fail(); \
 	}
 
 /**\public
@@ -979,7 +979,7 @@ TestListElement* currentTest;
  */
 #define kct_assertNotConditionMsg(message,condition) \
 	if ((condtion)==true){ \
-		failMsg(message); \
+		kct_failMsg(message); \
 	}
 
 /**\public
@@ -1031,13 +1031,13 @@ TestListElement* currentTest;
 		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_act,private_kct_variable_kct_assertEqualPrimitiveMsg_intactual,conversion); \
 		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
 			message, \
-			KCT_ERRORMESSAGE_EXPECTED, \
+			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
 			private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp, \
-			KCT_ERRORMESSAGE_ACTUAL, \
+			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
 			private_kct_variable_kct_assertEqualPrimitiveMsg_str_act); \
 		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp); \
 		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_act); \
-		fail(); \
+		kct_fail(); \
 	} \
 }
 
@@ -1090,13 +1090,13 @@ TestListElement* currentTest;
 		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act,private_kct_variable_kct_assertNotEqualPrimitiveMsg_intactual,conversion); \
 		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
 			message, \
-			KCT_ERRORMESSAGE_EXPECTED, \
+			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
 			private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp, \
-			KCT_ERRORMESSAGE_ACTUAL, \
+			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
 			private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act); \
 		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp); \
 		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act); \
-		fail(); \
+		kct_fail(); \
 	} \
 }
 
@@ -1204,19 +1204,129 @@ TestListElement* currentTest;
 		char* private_kct_variable_kct_assertEqualStructMsg_str_act=toStringFunction(structactual); \
 		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
 			message, \
-			KCT_ERRORMESSAGE_EXPECTED, \
+			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
 			private_kct_variable_kct_assertEqualStructMsg_str_exp, \
-			KCT_ERRORMESSAGE_ACTUAL, \
+			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
 			private_kct_variable_kct_assertEqualStructMsg_str_act); \
 		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_exp); \
 		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_act); \
-		fail(); \
+		kct_fail(); \
 	} \
 }
 
-//TODO documentation
-#define assertNotEqualIntMsg(message,expected,actual) \
-	assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
+/**\public
+ * \brief Checks if 2 structured data are different. If not, send an error
+ *
+ * The function checks if 2 structure data are not equal. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * The function can easily manage structure data (typedef struct). To do so,
+ * however, it needs 2 functions:
+ *  \li a compare function: this function takes 2 structure value of the same type
+ *  	and checks if they are equal; if they are, the function returns 0, otherwise it returns a
+ *  	non zero value. Note that the function can be much complex than a equal/different function:
+ *  	like strcmp(), it might returns a negative number if the first struct has a less value than the second and/or
+ *  	a positive number if the first structure has a greater value than the second one. The important stuff is
+ *  	that it returns 0 if the 2 given structs are equal.
+ *  \li a string conversion functions: the function has to take only one parameter, the structure to stringify and
+ *  	must return a char*. Moreover, <b>it must allocate a new string</b>: this is mandatory because
+ *  	the function will automatically free the char pointer returned by the function.
+ *
+ * \warning {While primitive types can be inserted as values to be checked,
+ * the function can't compare them with ease. If you have to compare strings or structures,
+ * please use PRIVATE_KCT_ASSERTINTEQUAL or similar}
+ *
+ * An example of the use of this function:
+ * \code
+ *	typedef struct Point {
+ *		int x;
+ *		int y;
+ *	} Point;
+ *
+ *	char* Point2String(Point p){
+ *		char* buffer=malloc(100);
+ *		sprintf(buffer,"(%d %d)",p.x,p.y);
+ *		return buffer;
+ *	}
+ *
+ *	int comparePoints(Point p1,Point p2){
+ *		if (p1.x!=p2.x){
+ *			return 1;
+ *		}
+ *		if (p1.y!=p2.y){
+ *			return 1;
+ *		}
+ *		return 0;
+ *	}
+ *
+ *	void testOK(){
+ *		Point px;
+ *		Point py;
+ *		px.x=5;
+ *		px.y=4;
+ *		py.x=5;
+ *		py.y=5;
+ *		kct_assertNotEqualStructMsg(
+ *			"the 2 points are different!",
+ *			Point,
+ *			Point2String,
+ *			comparePoints,
+ *			px,
+ *			py);
+ *	}
+ *
+ *	int main(){
+ *		kct_addTest(testOK);
+ *		kct_runAllTest(stdout);
+ *		return 0;
+ *	}
+ * \endcode
+ *
+ * \pre
+ *  \li message is of type char* (or a string);
+ *  \li type is a struct type;
+ *  \li toStringFunction is a name of a declared function;
+ *  \li toStringFunction takes only one parameter of type "type";
+ *  \li toStringFunction return a char*;
+ *  \li toStringFunction allocates a new string in the heap representing the struct given;
+ *  \li compareFunction is a name of a declared function;
+ *  \li compareFunction takes only 2 paramters of type "type";
+ *  \li compareFunction returns 0 or another value;
+ *  \li compareFunction must return 0 if the 2 values are equal;
+ *  \li compareFunction must return any other value beside 0 if the 2 values are different;
+ *  \li expected is a value of type type;
+ *  \li actual is a value of type type;
+ *
+ * @param [char*]message represents a custom message to prepend to the error message;
+ * @param type represents the type of expected and actual values and the type
+ * 	of the parameters of the functions toStringFunction and compareFunction;
+ * @param toStringFunction represents the name
+ * @param expected the value that the developer expects to get;
+ * @param actual the very value received
+ */
+#define kct_assertNotEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
+	type private_kct_variable_kct_assertEqualStructMsg_structexpected=expected; \
+	type private_kct_variable_kct_assertEqualStructMsg_structactual=actual; \
+	if (compareFunction(private_kct_variable_kct_assertEqualStructMsg_structexpected,private_kct_variable_kct_assertEqualStructMsg_structactual)==0){ \
+		char* private_kct_variable_kct_assertEqualStructMsg_str_exp=toStringFunction(structexpected); \
+		char* private_kct_variable_kct_assertEqualStructMsg_str_act=toStringFunction(structactual); \
+		PRIVATE_KCT_COMPOSESTRING(currentTest->errorMessage, \
+			message, \
+			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
+			private_kct_variable_kct_assertEqualStructMsg_str_exp, \
+			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
+			private_kct_variable_kct_assertEqualStructMsg_str_act); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_exp); \
+		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_act); \
+		kct_fail(); \
+	} \
+}
 
 /**\brief Checks if 2 pointers values are equal. If not, send an error
  * \public
@@ -1376,7 +1486,7 @@ TestListElement* currentTest;
 #define kct_assertIsNotNull(pointer) { \
 	void* private_kct_variable_kct_assertIsNotNull=(pointer); \
 	if (private_kct_variable_kct_assertIsNotNull==NULL){ \
-		fail(); \
+		kct_fail(); \
 	} \
 }
 
@@ -1395,7 +1505,7 @@ TestListElement* currentTest;
 #define kct_assertIsNotNullMsg(message,pointer) { \
 	void* private_kct_variable_kct_assertIsNotNullMsg=(pointer); \
 	if (private_kct_variable_kct_assertIsNotNullMsg==NULL){ \
-		failMsg(message); \
+		kct_failMsg(message); \
 	} \
 }
 
@@ -1413,7 +1523,7 @@ TestListElement* currentTest;
 #define kct_assertIsNull(pointer) { \
 	void* private_kct_variable_kct_assertIsNull=(pointer); \
 	if (private_kct_variable_kct_assertIsNull!=NULL){ \
-		fail(); \
+		kct_fail(); \
 	}
 
 /**\brief test whether or not a pointer is not NULL
@@ -1433,7 +1543,7 @@ TestListElement* currentTest;
 #define kct_assertIsNullMsg(message,pointer) { \
 	void* private_kct_variable_kct_assertIsNullMsg=(pointer); \
 	if (private_kct_variable_kct_assertIsNullMsg!=NULL){ \
-		failMsg(message); \
+		kct_failMsg(message); \
 	} \
 }
 
@@ -1483,16 +1593,16 @@ TestListElement* currentTest;
  */
 #define kct_assertExtremis(lowerbound,upperbound,lowin,upin,actual) { \
 	if (actual<lowerbound){ \
-		fail(); \
+		kct_fail(); \
 	} \
 	if (actual>upperbound){ \
-		fail(); \
+		kct_fail(); \
 	} \
 	if ((lowin==false)&&(actual==lowerbound)){ \
-		fail(); \
+		kct_fail(); \
 	} \
 	if ((upin==false)&&(actual==upperbound)) { \
-		fail(); \
+		kct_fail(); \
 	}
 
 /**\brief checks if a value is in a given interval
@@ -1543,16 +1653,16 @@ TestListElement* currentTest;
  */
 #define kct_assertExtremisMsg(message,lowerbound,upperbound,lowin,upin,actual) \
 	if (actual<lowerbound){ \
-		failMsg(message); \
+		kct_failMsg(message); \
 	} \
 	if (actual>upperbound){ \
-		failMsg(message); \
+		kct_failMsg(message); \
 	} \
 	if ((lowin==false)&&(actual==lowerbound)){ \
-		failMsg(message); \
+		kct_failMsg(message); \
 	} \
 	if ((upin==false)&&(actual==upperbound)) { \
-		failMsg(message); \
+		kct_failMsg(message); \
 	}
 
 #endif /* KOLDARCTESTER_H_ */
