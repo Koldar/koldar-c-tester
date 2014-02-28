@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+  <compounddef id="structTestList" kind="struct" prot="public">
+    <compoundname>TestList</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structTestList_1a731a61bf04a73bc32bee5d9061bcc2af" prot="public" static="no" mutable="no">
+        <type><ref refid="structTestListElement" kindref="compound">TestListElement</ref> *</type>
+        <definition>TestListElement* TestList::head</definition>
+        <argsstring></argsstring>
+        <name>head</name>
+        <briefdescription>
+<para>represents the first element of the list. </para>        </briefdescription>
+        <detaileddescription>
+<para>You can cycle through out the list using the the field &quot;next&quot; of the <ref refid="structTestListElement" kindref="compound">TestListElement</ref> </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="472" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="472" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTestList_1aa66fa1d67e4be5ef572cda8f114732b9" prot="public" static="no" mutable="no">
+        <type><ref refid="structTestListElement" kindref="compound">TestListElement</ref> *</type>
+        <definition>TestListElement* TestList::tail</definition>
+        <argsstring></argsstring>
+        <name>tail</name>
+        <briefdescription>
+<para>represents the last element of the list. </para>        </briefdescription>
+        <detaileddescription>
+<para>Used to speed up the append operation. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="477" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="477" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTestList_1a2a83f8e89d7e7446ffaad68a82e884b1" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int TestList::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <briefdescription>
+<para>the number of the total test functions in the list </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="481" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="481" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Represents the entire list of test functions. </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="6">
+        <label>TestList</label>
+        <link refid="structTestList"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>TestListElement</label>
+        <link refid="structTestListElement"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="466" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="466" bodyend="482"/>
+    <listofallmembers>
+      <member refid="structTestList_1a731a61bf04a73bc32bee5d9061bcc2af" prot="public" virt="non-virtual"><scope>TestList</scope><name>head</name></member>
+      <member refid="structTestList_1a2a83f8e89d7e7446ffaad68a82e884b1" prot="public" virt="non-virtual"><scope>TestList</scope><name>size</name></member>
+      <member refid="structTestList_1aa66fa1d67e4be5ef572cda8f114732b9" prot="public" virt="non-virtual"><scope>TestList</scope><name>tail</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

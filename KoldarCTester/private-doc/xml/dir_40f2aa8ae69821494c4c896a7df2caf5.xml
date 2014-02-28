@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+  <compounddef id="dir_40f2aa8ae69821494c4c896a7df2caf5" kind="dir">
+    <compoundname>macro/</compoundname>
+    <innerfile refid="KoldarCTester_8h">KoldarCTester.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/"/>
+  </compounddef>
+</doxygen>

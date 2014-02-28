@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+  <compounddef id="structTestListElement" kind="struct" prot="public">
+    <compoundname>TestListElement</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structTestListElement_1a1548cde8fcea08f7502edcedf45eaea5" prot="public" static="no" mutable="no">
+        <type><ref refid="KoldarCTester_8h_1aa988ee461e7b20b71ccefb4e79ccfcbf" kindref="member">TestFunction</ref></type>
+        <definition>TestFunction TestListElement::testFunction</definition>
+        <argsstring></argsstring>
+        <name>testFunction</name>
+        <briefdescription>
+<para>the test case in the particular cell of the list </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="431" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="431" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTestListElement_1a9d7977e41f0e74d6ac372d248bbe23df" prot="public" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* TestListElement::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <briefdescription>
+<para>points to a brief description of what the test does </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="435" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="435" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTestListElement_1af1ac1303fdb0631c26c1c796bcdeb93b" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* TestListElement::errorMessage</definition>
+        <argsstring></argsstring>
+        <name>errorMessage</name>
+        <briefdescription>
+<para>represents the string to be filled with an error message. </para>        </briefdescription>
+        <detaileddescription>
+<para>When an error occurs in the test function pointed by &quot;function&quot; field this variable points to the error message which can help solving the problem. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="442" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="442" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTestListElement_1afc6f3d2eb2a6da34bf690f12c07b11dd" prot="public" static="no" mutable="no">
+        <type>short</type>
+        <definition>short TestListElement::result</definition>
+        <argsstring></argsstring>
+        <name>result</name>
+        <briefdescription>
+<para>holds the result of the test. </para>        </briefdescription>
+        <detaileddescription>
+<para>The result of the test can be one the values stored in TestResult. See the KCT_RESULTOUTCOME_XXX macro set to have further informations. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="449" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="449" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTestListElement_1aed8e6f8c8766aae69299fe2b8f951999" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool TestListElement::skip</definition>
+        <argsstring></argsstring>
+        <name>skip</name>
+        <briefdescription>
+<para>controls whether or not you want to skip this test </para>        </briefdescription>
+        <detaileddescription>
+<para>Set it to true if you want to skip the test, false otherwise </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="454" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="454" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTestListElement_1a9c677e75182a00d31810530641ed942c" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structTestListElement" kindref="compound">TestListElement</ref> *</type>
+        <definition>struct TestListElement* TestListElement::next</definition>
+        <argsstring></argsstring>
+        <name>next</name>
+        <briefdescription>
+<para>points to the next test function </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="458" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="458" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Defines a single element of the list. </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="9">
+        <label>TestListElement</label>
+        <link refid="structTestListElement"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" line="427" bodyfile="/media/DataDisk/Users/koldar/Documents/CC++/KoldarCTester/macro/KoldarCTester.h" bodystart="427" bodyend="459"/>
+    <listofallmembers>
+      <member refid="structTestListElement_1a9d7977e41f0e74d6ac372d248bbe23df" prot="public" virt="non-virtual"><scope>TestListElement</scope><name>description</name></member>
+      <member refid="structTestListElement_1af1ac1303fdb0631c26c1c796bcdeb93b" prot="public" virt="non-virtual"><scope>TestListElement</scope><name>errorMessage</name></member>
+      <member refid="structTestListElement_1a9c677e75182a00d31810530641ed942c" prot="public" virt="non-virtual"><scope>TestListElement</scope><name>next</name></member>
+      <member refid="structTestListElement_1afc6f3d2eb2a6da34bf690f12c07b11dd" prot="public" virt="non-virtual"><scope>TestListElement</scope><name>result</name></member>
+      <member refid="structTestListElement_1aed8e6f8c8766aae69299fe2b8f951999" prot="public" virt="non-virtual"><scope>TestListElement</scope><name>skip</name></member>
+      <member refid="structTestListElement_1a1548cde8fcea08f7502edcedf45eaea5" prot="public" virt="non-virtual"><scope>TestListElement</scope><name>testFunction</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
