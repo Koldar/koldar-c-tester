@@ -15,11 +15,34 @@ char* Struct2String(Struct _s){
 	return result;
 }
 
-void test_PRIVATE_KCT_STRCAT(){
+void test_kct_assertEqualArrayPrimitiveMsg(){
+	int expected[]={1,2,3,4,5,6,7,8,9};
+	int actual[]={1,2,3,4,5,6,7,8,9};
+	int actual2[]={1,2,3,4,5,6,7,8,0};
+
+	kct_assertEqualArrayPrimitiveMsg("array mismatch 1",int,"%d",9,expected,actual);
+	kct_assertEqualArrayPrimitiveMsg("array mismatch 2",int,"%d",9,expected,actual2);
+}
+
+void test_kct_assertEqualStrMsg(){
+	char* a="hello";
+	char* b="world";
+	char* c="hello";
+
+	//kct_assertEqualStrMsg("a!=b",a,b);
+	//kct_assertEqualStrMsg("b!=c",b,c);
+	kct_assertEqualStrMsg("a!=c",a,c);
+
+	kct_assertEqualStrMsg("a!=c",a,"hello");
+	kct_assertEqualStrMsg("a!=c",a,"world");
+
+}
+
+void test_PKCTM_STRCAT(){
 	char* destination=0x0;
 	char* array[]={"hello"," ","world!"," It is good ","to be here!"};
 	//PRIVATE_KCT_STRCAT(destination,5,array);
-	PRIVATE_KCT_STRCAT(destination,5,array);
+	PKCTM_STRCAT(destination,5,array);
 	kct_assertEqualStrMsg("personal message","hello world! Itis good to be here!",destination);
 	free(array[0]);
 	free(array[1]);
@@ -71,11 +94,13 @@ void testOK(){
 int main(){
 
 	kct_addTest(testOK);
-	kct_addTest(test_PRIVATE_KCT_STRCAT);
+	kct_addTest(test_PKCTM_STRCAT);
 	kct_addTest(test_kct_assertEqualIntMsg);
 	kct_addTest(test_kct_assertNotEqualIntMsg);
 	kct_addTest(test_kct_assertEqualStructMsg);
 	kct_addTest(test_kct_assertExtremisMsg);
+	kct_addTest(test_kct_assertEqualStrMsg);
+	kct_addTest(test_kct_assertEqualArrayPrimitiveMsg);
 	kct_runAllTests(stdout);
 
 	return 0;

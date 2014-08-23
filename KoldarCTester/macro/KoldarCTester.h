@@ -4,7 +4,16 @@
 
 /**
  * \mainpage Koldar C Tester: a simple C tester
- * 
+ * \tableofcontents
+ * \date Nov 27, 2013
+ * \author koldar
+ * \version 1.2
+ *
+ * \section section08 Contacts
+ *
+ * If you have suggestions or complaints you can email me sending a mail to massimobono1@gmail.com: i won't promise you that you'll receive
+ * a quick answer but I hope you understand!
+ *
  * \section section01 Introduction
  *
  * The KoldarCTester is a single header that can be used to quickly implement
@@ -12,7 +21,7 @@
  *
  * \section section02 To All People who want to setup it quickly
  *
- * If you're in a hurry and want to setup KoldarCTester now, here the basic example
+ * If you're in a hurry and want to setup KoldarCTester now, copy and paste in your project KoldarCTester.h. Here the basic example
  * to make it work:
  *
  * \code
@@ -41,29 +50,45 @@
  * 	}
  * \endcode
  *
- *	\section section03 How to use KoldarCTester
+ * \section section11 Koldar C Tester Compressed version
  *
- *	Now that all the guys in a hurry are satisfied we can discuss how to correctly
+ * Koldar C Tester is single header holding only macros: so you need no changes in your makefile. Still, all the documentation source is held
+ * inside the header as well. If you think you don't need this documentation (because you already have the html version) you can use
+ * the file called "KoldarCTesterCompressed.h". This file is exactly equal to "KoldarCTester.h" but it don't contain any comment line: in this
+ * way the file is large only about 500 lines.
+ * \warning
+ *	I don't always update KoldarCTesterCompressed.h. If you feel your version is not updated you might consider to update it yourself. To do so you
+ *	only have to run these command on your linux terminal:
+ *	\verbatim
+ *	cd utils
+ *	gcc -o removeComments removeComments.c
+ *	cd ..
+ *	cat macro/KoldarCTester.h | utils/removeComments > macro/KoldarCTesterCompressed.h
+ *	\endverbatim
+ *
+ * \section section03 How to use KoldarCTester
+ *
+ * Now that all the guys in a hurry are satisfied we can discuss how to correctly
  *	use this header. To use it you have to copy "KoldarCTester.h" within your header paths. After
  *	that you can create a new .c files that will be used as a single test suite: if you want
  *	more test suites, you'll have to create more .c files. A single test file .c is divided into 2 parts:
- *	 -# some test functions;
- *	 -# a main function;
+ *	\li some test functions;
+ *	\li a main function;
  *
- *	 Basically KoldarCTester is a function list manager: you create some function and then you use
- *	 some header function to add them in a list. After that you can execute them all in one command: the
- *	 header handles all the work for you.
- *	 So, first of all, you can create a new file (call it TestInteger.c for example) and include the header:
+ *	Basically KoldarCTester is a function list manager: you create some function and then you use
+ *	some header function to add them in a list. After that you can execute them all in one command: the
+ *	header handles all the work for you.
+ *	So, first of all, you can create a new file (call it TestInteger.c for example) and include the header:
  *
- *	 \code
- *	 	#include "KoldarCTester.h"
- *	 \endcode
+ *	\code
+ *		#include "KoldarCTester.h"
+ *	\endcode
  *
- *	 You have to be sure the header is inside in your "include paths" (maybe through the -I compiler directive).
- *	 Secondly you have to create some test functions. For example, I have created these:
+ *	You have to be sure the header is inside in your "include paths" (maybe through the -I compiler directive).
+ *	Secondly you have to create some test functions. For example, I have created these:
  *
- *	 \code
- *	 	//Create 100 random number between 0 and 9 and test whether or
+ *	\code
+ *		//Create 100 random number between 0 and 9 and test whether or
  *	 	//not the upper and lower bound are not violated.
  *	 	void testRandomX(){
  *			int i;
@@ -85,9 +110,9 @@
  *	 	}
  *	 \endcode
  *
- *	 Let's skip up for the moment the "kct_assertExtremis" and "kct_assertCondition" part. Now you have created
- *	 all the test you need to verify some feature of your program. Now you need to run these tests... how? The main
- *	 function does exactly that:
+ *	Let's skip up for the moment the "kct_assertExtremis" and "kct_assertCondition" part. Now you have created
+ *	all the test you need to verify some feature of your program. Now you need to run these tests... how? The main
+ *	function does exactly that:
  *
  *	 \code
  *	 	int main(){
@@ -99,50 +124,55 @@
  *	 	}
  *	 \endcode
  *
- *	 Now you can build it. The compiler will probably complaints about "addTest" and "kct_runAllTest" do nothings:
- *	 don't trust him, these function are actually pretty useful!
- *	 Now try to run the program: you should get something like this:
+ *	Now you can build it. The compiler will probably complaints about "addTest" and "kct_runAllTest" do nothings:
+ *	don't trust him, these function are actually pretty useful!
+ *	Now try to run the program: you should get something like this:
  *
  *	 \image html image01.png
  *
- *	 The tests are stored in a list: though it might be not so fast
- *	 (like Bjame Stroudtrup say in http://www.youtube.com/watch?v=YQs6IC-vgmo),
- *	 the list are quite easy to understand even for programmers beginner, so everyone
- *	 can improve freely the header. Moreover, unlike other test suite, this header
- *	 is totally <b>free of memory leak</b>. Sure, you can say:
- *	 "well, that's should be obvious!"; well, of course it is, but you'll never
- *	 know what you download out in the internet.
+ *	The tests are stored in a list: though it might be not so fast
+ *	(like Bjame Stroudtrup say in http://www.youtube.com/watch?v=YQs6IC-vgmo),
+ *	the list are quite easy to understand even for programmers beginner, so everyone
+ *	can improve freely the header. Moreover, unlike other test suite, this header
+ *	is totally <b>free of memory leak</b>. Sure, you can say:
+ *	"well, that's should be obvious!"; well, of course it is, but you'll never
+ *	know what you download out in the internet.
  *
  *	\section section04 Basic Elements in the header
  *
- *	In the header there are basically 6 important elements:
- *	 -# assertions;
- *	 -# function kct_addTest();
- *	 -# function kct_addTestImproved();
- *	 -# function kct_runAllTest();
- *	 -# variable currentTest;
- *	 -# variable testList;
+ * In the header there are basically 6 important elements:
+ *	-# assertions;
+ *	-# function kct_addTest();
+ *	-# function kct_runAllTests();
+ *	-# variable currentTest;
+ *	-# variable testList;
+ *	-# control macros;
  *
- *	 "testList" variable represents the list that will store the functions and some other
- *	 data.
+ *	kct_addTest() is the main function used to add a test function in the list. There is also a alternative version of this
+ *	function called kct_addTestImproved(): it has the same aim of kct_addTest() but with this function
+ *	you can also specify whether or not you want to skip the function.
  *
- *	 "currentTest" is the test that is running at the moment; it is mainly
- *	 used to lighten the prototype of the function: in this way the developer
- *	 can <b>focus</b> on the test development insted of wasting time on understand the
- *	 testing suite.
+ *	kct_runAllTest() is obviously used to execute all the test the programmer coded. Note that with this function
+ *	the list is automatically deallocated from the heap: in this way, if you are
+ *	testing memory leak in your code, Koldar C Tester will not produces memory leaks by itself.
  *
- *	 kct_addTest() is the main function used to add a function in the list.
+ *	The assertions are the core of the testing: they allows you to check if a particular data satisfy a particular
+ *	condition. See \ref section05 for more info.
  *
- *	 kct_addTestImproved() has the same aim of kct_addTest() but with this function
- *	 you can also specify whether or not you want to skip the function.
+ *	The control macros are particular macros that allows you to tweak the parameters used by the header. This includes some
+ *	constants like feel&look strings and conversion buffer size.
  *
- *	 kct_runAllTest() is obviously used to execute the test. Note that with this function
- *	 the list is automatically deallocated from the heap: in this way, if you are
- *	 testing memory leak in your code, Koldar C Tester will not produces memory leaks by itself.
+ *	"testList" variable represents the list that will store the test functions and some other
+ *	data. See \ref section07 for further information
+ *
+ *	"currentTest" is the test that is running at the moment; it is mainly
+ *	used to lighten the prototype of the function: in this way the developer
+ *	can <b>focus</b> on the test development insted of wasting time on understand the
+ *	testing suite. Again, see \ref section07 for additional data
  *
  *	\section section05 Assertion
  *
- *	As we have introduce in the previous section, one of the most important things
+ * As we have introduce in the previous section, one of the most important things
  *	in the header are assertions. Assertions are shortcuts to test some conditions:
  *	if the condition is met nothing happens; otherwise the test is terminate and the
  *	header alerts you that in the specific test something went wrong.
@@ -176,7 +206,7 @@
  *
  *	\section section06 Skip tests
  *
- *	Let assume you have 100 tests regarding a particular big feature of your program.
+ * Let assume you have 100 tests regarding a particular big feature of your program.
  *	It is probable that, to execute all 100 tests, your computer needs some time.
  *	If you are sure that some tests (i.e 53 and 67) return a OK status, you might
  *	want to skip them, for not wasting time. Well, you can easily do that using
@@ -209,9 +239,9 @@
  *	of failed tests <b>must always be 0%</b>.
  *
  *
- *	\section section07 "Deeper understanding of KoldarCTester.h"
+ *	\section section07 Deeper understanding of KoldarCTester.h
  *
- *	As we have said before, KoldarCTester basically creates a test list and loop over it.
+ * As we have said before, KoldarCTester basically creates a test list and loop over it.
  *
  *	\dot
  *		digraph list {
@@ -254,17 +284,78 @@
  *	\li a variable currentTest: while the program iterate through out all the list element, every TestListElement
  *	is stored in a temporary variable. In this way the program can exactly know what TestListElement it is handling;
  *
+ * \cond PRIVATE_DOCUMENTATION
  *
- * \section section08 "Contacts"
+ * \section section09 Name Conventions
  *
- * If you have suggestions or complains you can email me sending a mail to massimobono1@gmail.com: i won't promise you that you'll receive
- * a quick answer but I hope you understand!
+ * Here I'll focus on the private part of the header.
  *
- * \date Nov 27, 2013
- * \author koldar
- * \version 1.0
+ * First of all, all private macro/function/types/variables starts with the prefix "pkctX_" (it means Private Koldar C Tester). X is actually
+ * a character, whose value depends on what exactly is the private resource; for example:
+ *  -# if it is a macro, X will be m (pkctm_<name of the macro>);
+ *  -# if it is a type, X will be t (pcktt_<name of the type>);
+ *  -# if it is a variable, X will be v (pcktv_<name of the variable);
+ *
+ * Keep this in mind while you are looking inside this header.
+ * The second name convention you have to keep in mind is the all caps naming: all caps naming are all the private macros the header uses
+ * to implements its objectives; viceversa lowercase macros are all the macro representing a easy interface for the user. For example "PKCTM_INITTESTLIST()"
+ * macro creates a test element inside the list. Its user-interface is "kct_addTest()" which handles all the parameter not strictly necessary.
+ * There only an exception for this rule: the control macro. Control macros are alwasy all caps.
+ *
+ * \section section10 Writing you own assertions
+ *
+ * When writing assertion keep in mind this tips:
+ * -# always group the code of an assertion between "{ }": in this way the scope of all the variable you create inside the assertion will
+ *  not go outside the assertion itself; For example, this assertion is coded right:
+ *  \code
+ *  	//this define is still wrong! see point 2
+ *  	#define kct_assertYouAreAPro(you,i) { \
+ *  		printf("%d --> %s <-- %d\n",i,you,i); \
+ *  		kct_ok(); \
+ *  	}
+ *  \endcode
+ * -# always create a temporary variable in macro definition: in this way if the user insert a costly-computational function as parameter
+ * (or worse a random function), the macro will not behave weird. For example this assertion is coded wrong:
+ * \code
+ * 	#define kct_assertYouAreAPro(you,i) { \
+ *  	printf("%d --> %s <-- %d\n",i,you,i); \
+ *  	kct_ok(); \
+ *  }
+ * \endcode
+ * What if i is "rand()%1000"? the substitution would be <tt>"563 --> Koldar <-- 875"</tt>. And if i is a very complicate function
+ * the assertion would computate it twice! To avoid this you can add temporary variables:
+ * \code
+ *  //this define is still wrong! see point 3
+ * 	#define kct_assertYouAreAPro(you,i) { \
+ * 		int i2=(i);
+ *  	char* you2=(you);
+ *  	printf("%s is over %d!\n",you2,i2); \
+ *  	kct_ok(); \
+ *  }
+ * \endcode
+ * -# always use non standard variable names: Because of the way macros work you have to declare the temporary variables with weird names;
+ * in this way you can avoid duplicating vairable and so avoid shadowing. For example this is wrong:
+ * \code
+ * 	#define kct_assertYouAreAPro(you,i) { \
+ * 		int i2=(i);
+ *  	char* you2=(you);
+ *  	printf("%s is over %d!\n",you2,i2); \
+ *  	kct_ok(); \
+ *  }
+ * \endcode
+ * What if the tester has already declared a variable called i2? Those 2 variable might confuse the compiler (shadowing). To avoid this use
+ * the prefix discussed at the beginning of \ref section09 : in this case "pkctv_":
+ * \code
+ * 	#define kct_assertYouAreAPro(you,i) { \
+ * 		int pkctv_i2=(i);
+ *  	char* pkctv_you2=(you);
+ *  	printf("%s is over %d!\n",pkctv_you2,pkctv_i2); \
+ *  	kct_ok(); \
+ *  }
+ * \endcode
+ * It will not avoid the shadowing but it will reduce its occurence.
+ * \endcond
  */
-
 
 #ifndef KOLDARCTESTER_H_
 #define KOLDARCTESTER_H_
@@ -314,9 +405,9 @@
  * \brief Represents the string that separates 2 test function in the output
  *
  */
-#	define PRIVATE_KCT_TESTSEPARATOR "**************"
+#	define KCT_TESTSEPARATOR "**************"
 #else
-#	define PRIVATE_KCT_TESTSEPARATOR KCT_CONTROLMACRO_TESTSEPARATOR
+#	define KCT_TESTSEPARATOR KCT_CONTROLMACRO_TESTSEPARATOR
 #endif
 
 
@@ -341,17 +432,17 @@
  *
  */
 #ifndef KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
-	/**\brief Represents the string to print before the expected value in the error message
-	 * 
-	 *
-	 * The syntax of the error message is shown here:
-	 *
-	 * !!!ERROR!!! errorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
-	 *
-	 */
-#	define PRIVATE_KCT_ERRORMESSAGE_EXPECTED "\nExpected value: "
+/**\brief Represents the string to print before the expected value in the error message
+ *
+ *
+ * The syntax of the error message is shown here:
+ *
+ * !!!ERROR!!! errorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
+ *
+ */
+#	define KCT_ERRORMESSAGE_EXPECTED "\nExpected value: "
 #else
-#	define PRIVATE_KCT_ERRORMESSAGE_EXPECTED KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
+#	define KCT_ERRORMESSAGE_EXPECTED KCT_CONTROLMACRO_ERRORMESSAGE_EXPECTED
 #endif
 
 /**This macro allows you to change the default string that is printed out after the developer message
@@ -375,17 +466,17 @@
  *
  */
 #ifndef KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
-	/**
-	 * \brief Represents the string to print before the actual value in the error message
-	 *
-	 * The syntax of the error message is shown here:
-	 *
-	 * !!!ERROR!!! userErrorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
-	 *
-	 */
-#	define PRIVATE_KCT_ERRORMESSAGE_ACTUAL "\nActual value:   "
+/**
+ * \brief Represents the string to print before the actual value in the error message
+ *
+ * The syntax of the error message is shown here:
+ *
+ * !!!ERROR!!! userErrorMessage KCT_ERRORMESSAGE_EXPECTED value expected KCT_ERRORMESSAGE_ACTUAL actual value
+ *
+ */
+#	define KCT_ERRORMESSAGE_ACTUAL "\nActual value:   "
 #else
-#	define PRIVATE_KCT_ERRORMESSAGE_ACTUAL KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
+#	define KCT_ERRORMESSAGE_ACTUAL KCT_CONTROLMACRO_ERRORMESSAGE_ACTUAL
 #endif
 
 /**This macro allows you to change the default size of the buffer used to convert values into strings.
@@ -404,19 +495,21 @@
  *
  */
 #ifndef KCT_CONTROLMACRO_STRINGBUFFER
-	/**
-	 * Represents the size of the buffer used to convert number (float or integer it doesn't matter)
-	 * to strings. The constant is mainly used in the macros like PRIVATE_KCT_ITOA or PRIVATE_KCT_FTOA
-	 */
-#	define PRIVATE_KCT_STRINGBUFFER 15
+/**
+ * Represents the size of the buffer used to convert number (float or integer it doesn't matter)
+ * to strings. The constant is mainly used in the macros like PKCTM_ITOA or PKCTM_FTOA
+ */
+#	define KCT_STRINGBUFFER 15
 #else
-#	define PRIVATE_KCT_STRINGBUFFER KCT_CONTROLMACRO_STRINGBUFFER
+#	define KCT_STRINGBUFFER KCT_CONTROLMACRO_STRINGBUFFER
 #endif
+
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@ STRUCTURES DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+/// \cond PRIVATE_DOCUMENTATION
 
 /**
  * \brief type of a generic test function.
@@ -426,7 +519,6 @@
  *  -* return type of type "void;
  */
 typedef void (*TestFunction)(void);
-
 
 /**
  * \struct TestListElement
@@ -465,7 +557,7 @@ typedef struct TestListElement {
 	 *
 	 */
 	struct TestListElement* next;
-} TestListElement;
+} pkctt_TestListElement;
 
 /**
  * \struct TestList
@@ -478,43 +570,46 @@ typedef struct TestList {
 	 * You can cycle through out the list using the the field "next"
 	 * of the TestListElement
 	 */
-	TestListElement* head;
+	pkctt_TestListElement* head;
 	/**@brief represents the last element of the list.
 	 *
 	 * Used to speed up the append operation.
 	 */
-	TestListElement* tail;
+	pkctt_TestListElement* tail;
 	/**@brief the number of the total test functions in the list
 	 *
 	 */
 	int size;
-} TestList;
+} pkctt_TestList;
 
+///\endcond
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PRIVATE MACRO DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+/// \cond PRIVATE_DOCUMENTATION
+
 /**
  * \brief Represents the outcome of a test function when the test utterly fails
  *
  */
-#define PRIVATE_KCT_FAIL 0
+#define PKCTM_FAIL 0
 /**
  * \brief Represents the outcome of a test function when the test terminates successfully
  *
  */
-#define PRIVATE_KCT_SUCCESS 1
+#define PKCTM_SUCCESS 1
 /**
  * \brief Represents the outcome of a test function when the test was to be skipped
  *
  */
-#define PRIVATE_KCT_SKIPPED 2
+#define PKCTM_SKIPPED 2
 /**
  * \brief Represents the outcome of a test function that has not yet been executed
  *
  */
-#define PRIVATE_KCT_UNKNOWN 3
+#define PKCTM_UNKNOWN 3
 
 /**
  * \brief copy a string in another one
@@ -529,20 +624,19 @@ typedef struct TestList {
  * \post
  *  \li the string in constantString is copied in the heap a the addres destinationpointer
  *
- *  @param [char*]destinationpointer the pointer where the copy of the stirng will be copied
- *  @param [char*]constantString the original string
+ *  @param[out] destinationpointer (of type char*) the pointer where the copy of the string will be copied
+ *  @param[in] constantString (of type char*) the original string
  *
  */
-#define PRIVATE_KCT_COPYSTRING(destinationpointer,constantString) \
-	destinationpointer=malloc(strlen(constantString)+1); \
-	if (destinationpointer==NULL){ \
-		fprintf(stderr,"MaxTester.h:PRIVATE_KCT_COPYSTRING:not enough memory\n"); \
-		exit -1; \
-	} \
-	strcpy((char*)destinationpointer,constantString)
+#define PKCTM_COPYSTRING(destinationpointer,constantString) \
+		destinationpointer=malloc(strlen(constantString)+1); \
+		if (destinationpointer==NULL){ \
+			fprintf(stderr,"MaxTester.h:PKCTM_COPYSTRING:not enough memory\n"); \
+			exit -1; \
+		} \
+		strcpy((char*)destinationpointer,constantString)
 
-/**
- * \brief convert an integer to string
+/**\brief convert an integer to string
  *
  * \warning
  * 	It is highly recommended that you use as "string" parameter only a
@@ -552,11 +646,11 @@ typedef struct TestList {
  * Some example of this function use might be:
  * \code
  * 	//converts 4 in a string
- *	PRIVATE_KCT_INITSTRING(string,4,"%d");
+ *	PKCTM_INITSTRING(string,4,"%d");
  *	//converts 4.45 in a string
- *	PRIVATE_KCT_INITSTRING(string,4.45,"%2.3f");
+ *	PKCTM_INITSTRING(string,4.45,"%2.3f");
  *	//converts 4 in a string
- *	PRIVATE_KCT_INITSTRING(string,4,"%lu");
+ *	PKCTM_INITSTRING(string,4,"%lu");
  * \endcode
  *
  * \pre
@@ -573,14 +667,16 @@ typedef struct TestList {
  *  \li conversion must be a conversion printf format string;
  * \post
  *  \li string contains a string representation of num;
- *  \li string lead to an allocated space of memory that <b>must</b> be free manually with PRIVATE_KCT_FREESTRING();
+ *  \li string lead to an allocated space of memory that <b>must</b> be free manually with PKCTM_FREESTRING();
  *
- *  @param string the pointer that will lead to the string representation of num
- *  @param num the integer number to convert
+ *  @param[out] string (of type char*) the pointer that will lead to the string representation of num
+ *  @param[in] num (of type numeric) the integer number to convert
+ *  @param[in] conversion (of type char*) represents how the integer should be converted into a string. Accepted string are all
+ *  	those accepted by printf such as: %d, %lu, %04d, %03x %1.4f ex cetera.
  */
-#define PRIVATE_KCT_INITSTRING(string,num,conversion) \
-	string=malloc(PRIVATE_KCT_STRINGBUFFER); \
-	sprintf(string,conversion,num);
+#define PKCTM_INITSTRING(string,num,conversion) \
+		string=malloc(KCT_STRINGBUFFER); \
+		sprintf(string,conversion,num);
 
 /**
  * \brief free an already allocated string
@@ -591,15 +687,15 @@ typedef struct TestList {
  *
  *
  * \pre
- *  \li string was allocated with PRIVATE_KCT_INITSTRING;
+ *  \li string was allocated with PKCTM_INITSTRING;
  * \post
  *  \li string is freed from the memory;
  *
- * @param string the string to be deallocated;
+ * @param[in] string the string to be deallocated;
  *
  */
-#define PRIVATE_KCT_FREESTRING(string) \
-	free(string);
+#define PKCTM_FREESTRING(string) \
+		free(string);
 
 /**\brief compose a new string by concatenating all the strings in the the given array
  *
@@ -610,18 +706,18 @@ typedef struct TestList {
  *  	\code
  *  		char* a;
  *  		char** arraystring={"hello"," ","world!\n"};
- *  		PRIVATE_KCT_STRCAT(a,3,arraystring);
+ *  		PKCTM_STRCAT(a,3,arraystring);
  *  	\endcode
  *  	A variable holding a return value of a function is of course allowed:
  *  	\code
  *  		char* a=magicfunction();
  *  		char** arraystring={"hello"," ","world!\n"};
- *  		PRIVATE_KCT_STRCAT(a,3,arraystring);
+ *  		PKCTM_STRCAT(a,3,arraystring);
  *  	\endcode
  *  	while this call goes to error:
  *  	\code
  *  		char** arraystring={"hello"," ","world!\n"};
- *  		PRIVATE_KCT_STRCAT(magicfunction(),3,arraystring);
+ *  		PKCTM_STRCAT(magicfunction(),3,arraystring);
  *  	\endcode
  *  \li stringlength must represents the number of elements inside strings;
  *  \li strings must be char**;
@@ -629,25 +725,25 @@ typedef struct TestList {
  *  \li destination is a char* pointing to a string computed by concatenating all the
  *  	strings together.
  *
- * @param destination the pointer linking the strings concatenated
- * @param stringslength the number of elements inside the stirngs parameter
- * @param strings the set of string to be concatenated
+ * @param[out] destination the pointer linking the strings concatenated
+ * @param[in] stringslength the number of elements inside the stirngs parameter
+ * @param[in] strings the set of string to be concatenated
  */
-#define PRIVATE_KCT_STRCAT(destination,stringslength,strings) { \
-	/*represents the value of stringlength: stringlength might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
-	int private_kct_strcat_stringslength=(stringslength); \
-	/*represents the total length of the string which will be mallocated in destination*/ \
-	int private_kct_strcat_length=1; \
-	/*represents a iteration variable used in a loop*/ \
-	int private_kct_strcat_i; \
-	for (private_kct_strcat_i=0; private_kct_strcat_i<private_kct_strcat_stringslength; private_kct_strcat_i++){ \
-		private_kct_strcat_length+=strlen(strings[private_kct_strcat_i]); \
-	} \
-	destination=malloc(private_kct_strcat_length); \
-	strcpy(destination,strings[0]); \
-	for (private_kct_strcat_i=1; private_kct_strcat_i<private_kct_strcat_stringslength;private_kct_strcat_i++){ \
-		strcat(destination,strings[private_kct_strcat_i]); \
-	} \
+#define PKCTM_STRCAT(destination,stringslength,strings) { \
+		/*represents the value of stringlength: stringlength might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
+		int pkctv_stringslength=(stringslength); \
+		/*represents the total length of the string which will be mallocated in destination*/ \
+		int pkctv_length=1; \
+		/*represents a iteration variable used in a loop*/ \
+		int pkctv_i; \
+		for (pkctv_i=0; pkctv_i<pkctv_stringslength; pkctv_i++){ \
+			pkctv_length+=strlen(strings[pkctv_i]); \
+		} \
+		destination=malloc(pkctv_length); \
+		strcpy(destination,strings[0]); \
+		for (pkctv_i=1; pkctv_i<pkctv_stringslength;pkctv_i++){ \
+			strcat(destination,strings[pkctv_i]); \
+		} \
 }
 
 /**
@@ -665,20 +761,19 @@ typedef struct TestList {
  *  \li the tail of the list is NULL;
  *  \li the size of the list is 0;
  *
- *  @param [TestList*] construct a new TestList and store its pointer in this very parameter
+ *  @param[in] list (of type TestList*) construct a new TestList and store its pointer in this very parameter
  */
-#define PRIVATE_KCT_INITTESTLIST(list) \
-	list=malloc(sizeof(TestList)); \
-	if (list==NULL){ \
-		fprintf(stderr,"MaxTester.c:initTestList:1:Not enough memory\n"); \
-		exit -1; \
-	} \
-	list->head=NULL; \
-	list->tail=NULL; \
-	list->size=0
+#define PKCTM_INITTESTLIST(list) \
+		list=malloc(sizeof(pkctt_TestList)); \
+		if (list==NULL){ \
+			fprintf(stderr,"MaxTester.c:initTestList:1:Not enough memory\n"); \
+			exit -1; \
+		} \
+		list->head=NULL; \
+		list->tail=NULL; \
+		list->size=0
 
-/**
- * \brief Create a new TestListElement in the memory
+/**\brief Create a new TestListElement in the memory
  *
  * \pre
  *  \li element has to be of type TestListElement*;
@@ -690,25 +785,25 @@ typedef struct TestList {
  *  \li the field "result" of the newly created TestListElement is KCT_UNKNWON;
  *  \li the field "errorMessage" of the newly created TestListElement is NULL;
  *
- * @param [TestListElement*]element a uninitialized pointer of TestListElement that will be used to point the new structure
- * @param [TestFunction]_function the pointer name of the function that will be used as a test function
- * @param [char*]_description a string representing the description of the test;
- * @param [bool]toberun TRUE if you want to actually use this test during the test run, FALSE if you want to be added to the
+ * @param[out] element (of type TestListElement*) a uninitialized pointer of TestListElement that will be used to point the new structure
+ * @param[in] _function (of type TestFunction) the pointer name of the function that will be used as a test function
+ * @param[in] _description (of type char*) a string representing the description of the test;
+ * @param[in] toberun (of type bool) TRUE if you want to actually use this test during the test run, FALSE if you want to be added to the
  * 	list but you want to skip it
  *
  */
-#define PRIVATE_KCT_INITTESTLISTELEMENT(element,_function,_description,toberun) \
-	element=malloc(sizeof(TestListElement)); \
-	if (element==NULL){ \
-		fprintf(stderr,"KoldarCTester.h:PRIVATE_KCT_INITTESTLISTELEMENT:not enough memory"); \
-		exit -1; \
-	} \
-	element->testFunction=_function; \
-	PRIVATE_KCT_COPYSTRING(element->description,_description); \
-	element->errorMessage=NULL; \
-	element->result=PRIVATE_KCT_UNKNOWN; \
-	element->skip=!toberun; \
-	element->next=NULL
+#define PKCTM_INITTESTLISTELEMENT(element,_function,_description,toberun) \
+		element=malloc(sizeof(pkctt_TestListElement)); \
+		if (element==NULL){ \
+			fprintf(stderr,"KoldarCTester.h:PKCTM_INITTESTLISTELEMENT:not enough memory"); \
+			exit -1; \
+		} \
+		element->testFunction=_function; \
+		PKCTM_COPYSTRING(element->description,_description); \
+		element->errorMessage=NULL; \
+		element->result=PKCTM_UNKNOWN; \
+		element->skip=!toberun; \
+		element->next=NULL
 
 /**
  * \brief adds a new test function in the test list
@@ -726,25 +821,25 @@ typedef struct TestList {
  *  \li _test function is stored in the test list
  *  \li _errormessage field is set to NULL
  *
- * @param [TestList*]_list the test list where to add the test function
- * @param [TestFunction]_test the function to be added in the test list
- * @param [char*]_description a brief description of what the test verifies.
- * @param [bool]_toberun
+ * @param[in] _list (of type TestList*) the test list where to add the test function
+ * @param[in] _test (of type TestFunction) the function to be added in the test list
+ * @param[in] _description (of type char*) a brief description of what the test verifies.
+ * @param[in] _toberun (of type bool) can be one of these values:
  *  \li TRUE if you want to insert the testcase in the list and execute it;
  *  \li FALSE if you want to insert the testcase in the list but you want it to skip it;
  */
-#define PRIVATE_KCT_ADDTESTCASE(_list,_test,_description,_toberun) { \
-	TestListElement* newadd; \
-	PRIVATE_KCT_INITTESTLISTELEMENT(newadd,_test,_description,_toberun); \
-	if (_list->head==NULL){ \
-		_list->head=newadd; \
-		_list->tail=newadd; \
-	}else { \
-		_list->tail->next=newadd; \
-		_list->tail=newadd; \
-	} \
-	_list->size++; \
-}
+#define PKCTM_ADDTESTCASE(_list,_test,_description,_toberun) { \
+		pkctt_TestListElement* newadd; \
+		PKCTM_INITTESTLISTELEMENT(newadd,_test,_description,_toberun); \
+		if (_list->head==NULL){ \
+			_list->head=newadd; \
+			_list->tail=newadd; \
+		}else { \
+			_list->tail->next=newadd; \
+			_list->tail=newadd; \
+		} \
+		_list->size++; \
+		}
 
 /**
  * \brief free the memory occupied by the list.
@@ -755,19 +850,19 @@ typedef struct TestList {
  * \post
  *  \li the memory allocated to every TestListElement pointed by the list is freed.
  *
- * @param [TestList*]list the list to be freed
+ * @param[in] _list (of type TestList*) the list to be freed
  */
-#define PRIVATE_KCT_FREETESTLIST(_list) { \
-	TestListElement* tofree=_list->head; \
-	TestListElement* next; \
-	while (tofree!=NULL){ \
-		next=tofree->next; \
-		free((char*)tofree->description); \
-		free((char*)tofree->errorMessage); \
-		free(tofree); \
-		tofree=next; \
-	} \
-	free(_list); \
+#define PKCTM_FREETESTLIST(_list) { \
+		pkctt_TestListElement* tofree=_list->head; \
+		pkctt_TestListElement* next; \
+		while (tofree!=NULL){ \
+			next=tofree->next; \
+			free((char*)tofree->description); \
+			free((char*)tofree->errorMessage); \
+			free(tofree); \
+			tofree=next; \
+		} \
+		free(_list); \
 }
 
 /**
@@ -782,98 +877,99 @@ typedef struct TestList {
  * \post
  *  \li all the tests which have "skip" flag set to FALSE are run
  *
- * @param [FILE*]_f the file to write the output on
- * @param [TestList*]_list the list holding the various test functions
- * @param [bool]_postDelete
- *  \li TRUE if you want to automatically call clearTestCase() function	at the end of the test functions;
+ * @param[in] _f (of type FILE*) the file to write the output on
+ * @param[in] _list (of type TestList*) the list holding the various test functions
+ * @param[in] _postDelete (of type bool) can be one of these values:
+ *  \li TRUE if you want to automatically call PKCTM_FREETESTLIST() function at the end of the test functions;
  *  \li FALSE otherwise;
  */
-#define PRIVATE_KCT_RUNALLTEST(_f,_list,_postDelete) { \
-	TestListElement* testToRun=_list->head; \
-	int testnumber; \
-	int oktest; \
-	int skiptest; \
-	int failtest; \
-	while (testToRun!=NULL){ \
-		if (testToRun->skip==true){ \
-			testToRun->result=PRIVATE_KCT_SKIPPED; \
+#define PKCTM_RUNALLTEST(_f,_list,_postDelete) { \
+		pkctt_TestListElement* testToRun=_list->head; \
+		int testnumber; \
+		int oktest; \
+		int skiptest; \
+		int failtest; \
+		while (testToRun!=NULL){ \
+			if (testToRun->skip==true){ \
+				testToRun->result=PKCTM_SKIPPED; \
+				testToRun=testToRun->next; \
+				continue; \
+			} \
+			pkctv_currentTest=testToRun; \
+			fprintf(_f,"%s TEST \"%s\" %s\n",KCT_TESTSEPARATOR,testToRun->description,KCT_TESTSEPARATOR); \
+			fprintf(_f,"\n"); \
+			testToRun->testFunction(); \
+			if (testToRun->result == PKCTM_UNKNOWN){ \
+				testToRun->result=PKCTM_SUCCESS; \
+			}else { \
+				fprintf(_f,"!!!ERROR!!!\n%s",testToRun->errorMessage); \
+			} \
+			fprintf(_f,"\n"); \
 			testToRun=testToRun->next; \
-			continue; \
 		} \
-		currentTest=testToRun; \
-		fprintf(_f,"%s TEST \"%s\" %s\n",PRIVATE_KCT_TESTSEPARATOR,testToRun->description,PRIVATE_KCT_TESTSEPARATOR); \
+		fprintf(_f,"%s FINAL RESULTS %s\n",KCT_TESTSEPARATOR,KCT_TESTSEPARATOR); \
 		fprintf(_f,"\n"); \
-		testToRun->testFunction(); \
-		if (testToRun->result == PRIVATE_KCT_UNKNOWN){ \
-			testToRun->result=PRIVATE_KCT_SUCCESS; \
-		}else { \
-			fprintf(_f,"!!!ERROR!!!\n%s",testToRun->errorMessage); \
-		} \
-		fprintf(_f,"\n"); \
-		testToRun=testToRun->next; \
-	} \
-	fprintf(_f,"%s FINAL RESULTS %s\n",PRIVATE_KCT_TESTSEPARATOR,PRIVATE_KCT_TESTSEPARATOR); \
-	fprintf(_f,"\n"); \
-	testToRun=_list->head; \
-	testnumber=1; \
-	oktest=0; \
-	failtest=0; \
-	skiptest=0; \
-	while (testToRun!=NULL){ \
-		fprintf(_f,"%i) %s\t",testnumber,testToRun->description); \
-		switch (testToRun->result){ \
-		case PRIVATE_KCT_SUCCESS: { \
-			fprintf(_f,"SUCCESS"); \
-			oktest++; \
-			break; \
-		} \
-		case PRIVATE_KCT_FAIL: { \
-			fprintf(_f,"FAIL"); \
-			failtest++; \
-			break; \
-		} \
-		case PRIVATE_KCT_SKIPPED: { \
-			skiptest++; \
-			fprintf(_f,"SKIPPED"); \
-			break; \
-		} \
-		case PRIVATE_KCT_UNKNOWN: { \
-			fprintf(_f,"UNKNOWN"); \
-			break; \
-		} \
+		testToRun=_list->head; \
+		testnumber=1; \
+		oktest=0; \
+		failtest=0; \
+		skiptest=0; \
+		while (testToRun!=NULL){ \
+			fprintf(_f,"%i) %s\t",testnumber,testToRun->description); \
+			switch (testToRun->result){ \
+			case PKCTM_SUCCESS: { \
+				fprintf(_f,"SUCCESS"); \
+				oktest++; \
+				break; \
+			} \
+			case PKCTM_FAIL: { \
+				fprintf(_f,"FAIL"); \
+				failtest++; \
+				break; \
+			} \
+			case PKCTM_SKIPPED: { \
+				skiptest++; \
+				fprintf(_f,"SKIPPED"); \
+				break; \
+			} \
+			case PKCTM_UNKNOWN: { \
+				fprintf(_f,"UNKNOWN"); \
+				break; \
+			} \
+			} \
+			fprintf(_f,"\n"); \
+			testToRun=testToRun->next; \
+			testnumber++; \
 		} \
 		fprintf(_f,"\n"); \
-		testToRun=testToRun->next; \
-		testnumber++; \
-	} \
-	fprintf(_f,"\n"); \
-	fprintf(_f,"OK\t%d/%d %%run %2.3f\n",oktest,_list->size,(oktest*100.00)/(_list->size-skiptest)); \
-	fprintf(_f,"FAIL\t%d/%d %%run %2.3f\n",failtest,_list->size,(failtest*100.00)/(_list->size-skiptest)); \
-	fprintf(_f,"SKIPPED\t%d/%d\n",skiptest,_list->size); \
-	if (_postDelete){ \
-		PRIVATE_KCT_FREETESTLIST(_list); \
-		_list=NULL; \
-	} \
+		fprintf(_f,"OK\t%d/%d %%run %2.3f\n",oktest,_list->size,(oktest*100.00)/(_list->size-skiptest)); \
+		fprintf(_f,"FAIL\t%d/%d %%run %2.3f\n",failtest,_list->size,(failtest*100.00)/(_list->size-skiptest)); \
+		fprintf(_f,"SKIPPED\t%d/%d\n",skiptest,_list->size); \
+		if (_postDelete){ \
+			PKCTM_FREETESTLIST(_list); \
+			_list=NULL; \
+		} \
 }
+
+/// \endcond
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PRIVATE VARIABLE USED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+/// \cond PRIVATE_DOCUMENTATION
+
 /**
  * Represents the list holding every test.
  * This variable is used to simplify the MACRO prototype
  */
-TestList* testList=NULL;
-/*FIXME this variable prevents you to create multiple lists:
- * if you have 2 parallel executing lists, with this variable you can't obvously keep
- * trace on what test the 2 lists are executing!
- */
-/**
- * Represents the test which is currently running
+pkctt_TestList* pkctv_testList=NULL;
+/**\brief Represents the test which is currently running
  *
  */
-TestListElement* currentTest;
+pkctt_TestListElement* pkctv_currentTest;
+
+/// \endcond
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@ PUBLIC MACRO DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -889,16 +985,16 @@ TestListElement* currentTest;
  * \post
  *  \li the function is inside the test list
  *
- * @param [TestFunction]function the function to include in the test list;
- * @param [bool]torun TRUE is you want to actually run the test, FALSE if you want to include it in the list
+ * @param[in] function (of type TestFunction) the function to include in the test list;
+ * @param[in] torun (of type bool) TRUE is you want to actually run the test, FALSE if you want to include it in the list
  * 	but you want to skip it
  *
  */
 #define kct_addTestImproved(function,torun) \
-	if (testList==NULL){ \
-		PRIVATE_KCT_INITTESTLIST(testList); \
-	} \
-	PRIVATE_KCT_ADDTESTCASE(testList,function,#function,torun)
+		if (pkctv_testList==NULL){ \
+			PKCTM_INITTESTLIST(pkctv_testList); \
+		} \
+		PKCTM_ADDTESTCASE(pkctv_testList,function,#function,torun)
 
 /**
  * \brief adds a new function in the test list
@@ -910,10 +1006,10 @@ TestListElement* currentTest;
  * \post
  *  \li the function is inside the test list
  *
- * @param [TestFunction]function the function to include in the test list;
+ * @param[in] function (of type TestFunction) the function to include in the test list;
  */
 #define kct_addTest(function) \
-	kct_addTestImproved(function,true)
+		kct_addTestImproved(function,true)
 
 /**
  * \brief run all the test added to the test list.
@@ -928,51 +1024,53 @@ TestListElement* currentTest;
  * \post
  *  \li test outcome is appended to the outputfile
  *
- * @param [FILE*]outputfile where to write the test outcome
+ * @param[in] outputfile (of type FILE*) where to write the test outcome
  */
 #define kct_runAllTests(outputfile) \
-	PRIVATE_KCT_RUNALLTEST(outputfile,testList,true)
+		PKCTM_RUNALLTEST(outputfile,pkctv_testList,true)
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ASSERTION MACROS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
+//####################################### BASIC ############################################
+
 /**
  * \brief Terminate the test and set the result of it as a failure.
  *
  */
 #define kct_fail() \
-	currentTest->result=PRIVATE_KCT_FAIL; \
-	return;
+		pkctv_currentTest->result=PKCTM_FAIL; \
+		return;
 
 /**
  * \brief Terminate the test and set the result of it as a failure.
  *
- * @param [char*]message represents the message to
+ * @param[in] message (of type char*) represents the message to
  * 	display just before the ending of the test.
  *
  */
 #define kct_failMsg(message) \
-	PRIVATE_KCT_COPYSTRING(currentTest->errorMessage,message); \
-	kct_fail();
+		PKCTM_COPYSTRING(pkctv_currentTest->errorMessage,message); \
+		kct_fail();
 
 /**
  * \brief terminates successfully the current test
  *
  */
 #define kct_ok() \
-	return;
+		return;
 
 /**
  * \brief end the test as a failure if the condition is <b>not</b> met
  *
- *  @param condition represents the condition to be tested
+ *  @param[in] condition represents the condition to be tested
  */
 #define kct_assertCondition(condition) \
-	if ((condition)==false){ \
-		kct_fail(); \
-	}
+		if ((condition)==false){ \
+			kct_fail(); \
+		}
 
 /**
  * \brief end the test as a failure if the condition IS <b>not</b> met
@@ -980,24 +1078,24 @@ TestListElement* currentTest;
  * In addition to end the test if condition is <b>not</b> met, this
  * function will display an error message.
  *
- * @param [char*]message represents the error message to be display if the condition
+ * @param[in] message (of type char*) represents the error message to be display if the condition
  * 	is not met
- * @param condition represents the condition to be test
+ * @param[in] condition represents the condition to be test
  */
 #define kct_assertConditionMsg(message,condition) \
-	if ((condition)==false){ \
-		kct_failMsg(message); \
-	}
+		if ((condition)==false){ \
+			kct_failMsg(message); \
+		}
 
 /**
  * \brief end the test as a failure if the condition is met
  *
- *  @param condition represents the condition to be tested
+ *  @param[in] condition represents the condition to be tested
  */
 #define kct_assertNotCondition(condition) \
-	if ((condition)==true){ \
-		kct_fail(); \
-	}
+		if ((condition)==true){ \
+			kct_fail(); \
+		}
 
 /**
  * \brief end the test as a failure if the condition is met
@@ -1005,15 +1103,16 @@ TestListElement* currentTest;
  * In addition to end the test if condition is met, this
  * function will display an error message.
  *
- * @param [char*]message represents the error message to be display if the condition
+ * @param[in] message (of type char*) represents the error message to be display if the condition
  * 	is not met
- * @param condition represents the condition to be test
+ * @param[in] condition represents the condition to be test
  */
 #define kct_assertNotConditionMsg(message,condition) \
-	if ((condtion)==true){ \
-		kct_failMsg(message); \
-	}
+		if ((condtion)==true){ \
+			kct_failMsg(message); \
+		}
 
+//################################### STRING ASSERTIONS ####################################
 
 /**\brief tests if 2 strings are equal
  *
@@ -1028,36 +1127,36 @@ TestListElement* currentTest;
  *  \li actual is not NULL;
  *  \li actual is of type char*;
  *
- *  @param optmessage an optional message written by the developer holding useful information about this error
- *  @param expected the string that should be returned from the funciton under test;
- *  @param actual the string that is actually returned by the function under test;
+ *  @param[in] optmessage an optional message written by the developer holding useful information about this error
+ *  @param[in] expected the string that should be returned from the funciton under test;
+ *  @param[in] actual the string that is actually returned by the function under test;
  */
 #define kct_assertEqualStrMsg(optmessage,expected,actual){ \
-	/*represents the value of optmessage: optmessage might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
-	char* private_kct_assertEqualStr_optmessage=(optmessage); \
-	/*represents the value of expected: expected might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
-	char* private_kct_assertEqualStr_expected=(expected); \
-	/*represents the value of actual: actual might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
-	char* private_kct_assertEqualStr_actual=(actual); \
-	if (strcmp(private_kct_assertEqualStr_expected,private_kct_assertEqualStr_actual)!=0){ \
-		char* private_kct_assertEqualStr_array[]={ \
-			private_kct_assertEqualStr_optmessage, \
-			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
-			"\"", \
-			private_kct_assertEqualStr_expected, \
-			"\"", \
-			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
-			"\"", \
-			private_kct_assertEqualStr_actual, \
-			"\"" \
+		/*represents the value of optmessage: optmessage might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
+		char* pkctv_optmessage=(optmessage); \
+		/*represents the value of expected: expected might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
+		char* pkctv_expected=(expected); \
+		/*represents the value of actual: actual might be a funciton call (maybe even random) so this step is important to preserve deterministic behaviour*/ \
+		char* pkctv_actual=(actual); \
+		if (strcmp(pkctv_expected,pkctv_actual)!=0){ \
+			char* pkctv_array[]={ \
+					pkctv_optmessage, \
+					KCT_ERRORMESSAGE_EXPECTED, \
+					"\"", \
+					pkctv_expected, \
+					"\"", \
+					KCT_ERRORMESSAGE_ACTUAL, \
+					"\"", \
+					pkctv_actual, \
+					"\"" \
 		}; \
-		PRIVATE_KCT_STRCAT( \
-			currentTest->errorMessage, \
-			9, \
-			private_kct_assertEqualStr_array \
+		PKCTM_STRCAT( \
+				pkctv_currentTest->errorMessage, \
+				9, \
+				pkctv_array \
 		); \
 		kct_fail(); \
-	} \
+		} \
 }
 
 /**\brief tests if 2 strings are equal
@@ -1071,13 +1170,14 @@ TestListElement* currentTest;
  *  \li actual is not NULL;
  *  \li actual is of type char*;
  *
- *  @param expected the string that should be returned from the funciton under test;
- *  @param actual the string that is actually returned by the function under test;
+ *  @param[in] expected the string that should be returned from the funciton under test;
+ *  @param[in] actual the string that is actually returned by the function under test;
  */
 #define kct_assertEqualStr(expected,actual){ \
 		kct_assertEqualStrMsg("",expected,actual) \
 }
 
+//################################### COMPOSITE TYPE #######################################
 
 /**
  * \brief Checks if 2 simple values are equal. If not, send an error
@@ -1103,7 +1203,7 @@ TestListElement* currentTest;
  *
  * \warning While string and structure can be inserted as values to be checked,
  * the function can't compare them with ease. If you have to compare strings or structures,
- * please use kct_assertEqualStrMsg() or PRIVATE_KCT_ASSERTSTRUCTEQUAL
+ * please use kct_assertEqualStrMsg() or PKCTM_ASSERTSTRUCTEQUAL
  *
  * \pre
  *  \li message is of type char* (or a string);
@@ -1112,39 +1212,39 @@ TestListElement* currentTest;
  *  \li expected is a value of type type;
  *  \li actual is a value of type type;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param type represents the type of expected and actual values;
- * @param conversion represents the formatter string used to format the stirng representations of expected and actual;
- * @param expected the value that the developer expects to get;
- * @param actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] type represents the type of expected and actual values (for example "unsigned long", "int" or "double");
+ * @param[in] conversion (of type char*) represents the formatter string used to format the stirng representations of expected and actual;
+ * @param[in] expected (of type type) the value that the developer expects to get;
+ * @param[in] actual (of type type) the very value received
  */
 #define kct_assertEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
-	type private_kct_variable_kct_assertEqualPrimitiveMsg_intexpected=(expected); \
-	type private_kct_variable_kct_assertEqualPrimitiveMsg_intactual=(actual); \
-	if ((private_kct_variable_kct_assertEqualPrimitiveMsg_intactual)!=(private_kct_variable_kct_assertEqualPrimitiveMsg_intexpected)){ \
+		type pkctv_intexpected=(expected); \
+		type pkctv_intactual=(actual); \
+		if ((pkctv_intactual)!=(pkctv_intexpected)){ \
+			/*Represents a string representation of the given primitive type*/ \
+		char* pkctv_strexp; \
 		/*Represents a string representation of the given primitive type*/ \
-		char* private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp; \
-		/*Represents a string representation of the given primitive type*/ \
-		char* private_kct_variable_kct_assertEqualPrimitiveMsg_str_act; \
-		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp,private_kct_variable_kct_assertEqualPrimitiveMsg_intexpected,conversion); \
-		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_act,private_kct_variable_kct_assertEqualPrimitiveMsg_intactual,conversion); \
+		char* pkctv_stract; \
+		PKCTM_INITSTRING(pkctv_strexp,pkctv_intexpected,conversion); \
+		PKCTM_INITSTRING(pkctv_stract,pkctv_intactual,conversion); \
 		/*Represents an arrya of string which, concatenated, will generated the error message*/ \
-		char* private_kct_assertEqualPrmitiveMsg_array[]={ \
-			message, \
-			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
-			private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp, \
-			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
-			private_kct_variable_kct_assertEqualPrimitiveMsg_str_act \
+		char* pkctv_array[]={ \
+				message, \
+				KCT_ERRORMESSAGE_EXPECTED, \
+				pkctv_strexp, \
+				KCT_ERRORMESSAGE_ACTUAL, \
+				pkctv_stract \
 		}; \
-		PRIVATE_KCT_STRCAT( \
-			currentTest->errorMessage, \
-			5, \
-			private_kct_assertEqualPrmitiveMsg_array \
+		PKCTM_STRCAT( \
+				pkctv_currentTest->errorMessage, \
+				5, \
+				pkctv_array \
 		); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_exp); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualPrimitiveMsg_str_act); \
+		PKCTM_FREESTRING(pkctv_strexp); \
+		PKCTM_FREESTRING(pkctv_stract); \
 		kct_fail(); \
-	} \
+		} \
 }
 
 /**
@@ -1171,7 +1271,7 @@ TestListElement* currentTest;
  *
  * \warning While string and structure can be inserted as values to be checked,
  * the function can't compare them with ease. If you have to compare strings or structures,
- * please use kct_assertEqualStrMsg() or PRIVATE_KCT_ASSERTSTRUCTEQUAL
+ * please use kct_assertEqualStrMsg() or PKCTM_ASSERTSTRUCTEQUAL
  *
  * \pre
  *  \li message is of type char* (or a string);
@@ -1180,39 +1280,39 @@ TestListElement* currentTest;
  *  \li expected is a value of type type;
  *  \li actual is a value of type type;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param type represents the type of expected and actual values;
- * @param conversion represents the formatter string used to format the string representations of expected and actual;
- * @param expected the value that the developer expects to get;
- * @param actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] type represents the type of expected and actual values (for example "unsigned long", "int" or "double");
+ * @param[in] conversion (of type char*) represents the formatter string used to format the string representations of expected and actual;
+ * @param[in] expected (of type type) the value that the developer expects to get;
+ * @param[in] actual (of type type) the very value received
  */
 #define kct_assertNotEqualPrimitiveMsg(message,type,conversion,expected,actual) { \
-	type private_kct_variable_kct_assertNotEqualPrimitiveMsg_intexpected=(expected); \
-	type private_kct_variable_kct_assertNotEqualPrimitiveMsg_intactual=(actual); \
-	if ((private_kct_variable_kct_assertNotEqualPrimitiveMsg_intactual)==(private_kct_variable_kct_assertNotEqualPrimitiveMsg_intexpected)){ \
+		type pkctv_intexpected=(expected); \
+		type pkctv_intactual=(actual); \
+		if ((pkctv_intactual)==(pkctv_intexpected)){ \
+			/*Represents a string representation of the given primitive type*/ \
+		char* pkctv_strexp; \
 		/*Represents a string representation of the given primitive type*/ \
-		char* private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp; \
-		/*Represents a string representation of the given primitive type*/ \
-		char* private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act; \
-		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp,private_kct_variable_kct_assertNotEqualPrimitiveMsg_intexpected,conversion); \
-		PRIVATE_KCT_INITSTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act,private_kct_variable_kct_assertNotEqualPrimitiveMsg_intactual,conversion); \
+		char* pkctv_stract; \
+		PKCTM_INITSTRING(pkctv_strexp,pkctv_intexpected,conversion); \
+		PKCTM_INITSTRING(pkctv_stract,pkctv_intactual,conversion); \
 		/*Represents an arrya of string which, concatenated, will generated the error message*/ \
-		char* private_kct_assertNotEqualPrimitiveMsg_array[]={ \
-			message, \
-			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
-			private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp, \
-			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
-			private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act \
+		char* pkctv_array[]={ \
+				message, \
+				KCT_ERRORMESSAGE_EXPECTED, \
+				pkctv_strexp, \
+				KCT_ERRORMESSAGE_ACTUAL, \
+				pkctv_stract \
 		}; \
-		PRIVATE_KCT_STRCAT( \
-			currentTest->errorMessage, \
-			5, \
-			private_kct_assertNotEqualPrimitiveMsg_array \
+		PKCTM_STRCAT( \
+				pkctv_currentTest->errorMessage, \
+				5, \
+				pkctv_array \
 		); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_exp); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualPrimitiveMsg_str_act); \
+		PKCTM_FREESTRING(pkctv_strexp); \
+		PKCTM_FREESTRING(pkctv_stract); \
 		kct_fail(); \
-	} \
+		} \
 }
 
 /**
@@ -1241,7 +1341,7 @@ TestListElement* currentTest;
  *
  * \warning {While primitive types can be inserted as values to be checked,
  * the function can't compare them with ease. If you have to compare strings or structures,
- * please use PRIVATE_KCT_ASSERTINTEQUAL or similar}
+ * please use PKCTM_ASSERTINTEQUAL or similar}
  *
  * An example of the use of this function:
  * \code
@@ -1304,39 +1404,40 @@ TestListElement* currentTest;
  *  \li expected is a value of type type;
  *  \li actual is a value of type type;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param type represents the type of expected and actual values and the type
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] type represents the type of expected and actual values and the type
  * 	of the parameters of the functions toStringFunction and compareFunction;
- * @param toStringFunction represents the name
- * @param expected the value that the developer expects to get;
- * @param actual the very value received
+ * @param[in] toStringFunction represents the name
+ * @param[in] compareFunction represents the function used to compare the structure of type "type"
+ * @param[in] expected (of type type) the value that the developer expects to get;
+ * @param[in] actual (of type type) the very value received
  */
 #define kct_assertEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
-	type private_kct_variable_kct_assertEqualStructMsg_structexpected=expected; \
-	type private_kct_variable_kct_assertEqualStructMsg_structactual=actual; \
-	if (compareFunction(private_kct_variable_kct_assertEqualStructMsg_structexpected,private_kct_variable_kct_assertEqualStructMsg_structactual)!=0){ \
-		char* private_kct_variable_kct_assertEqualStructMsg_str_exp=toStringFunction(private_kct_variable_kct_assertEqualStructMsg_structexpected); \
-		char* private_kct_variable_kct_assertEqualStructMsg_str_act=toStringFunction(private_kct_variable_kct_assertEqualStructMsg_structactual); \
-		char* private_kct_assertEqualStructMsg_array[]={ \
-			message, \
-			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
-			"\"", \
-			private_kct_variable_kct_assertEqualStructMsg_str_exp, \
-			"\"", \
-			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
-			"\"", \
-			private_kct_variable_kct_assertEqualStructMsg_str_act, \
-			"\"" \
-		}; \
-		PRIVATE_KCT_STRCAT( \
-			currentTest->errorMessage, \
-			9, \
-			private_kct_assertEqualStructMsg_array \
-		); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_exp); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertEqualStructMsg_str_act); \
-		kct_fail(); \
-	} \
+		type pkctv_structexpected=expected; \
+		type pkctv_structactual=actual; \
+		if (compareFunction(pkctv_structexpected,pkctv_structactual)!=0){ \
+			char* pkctv_strexp=toStringFunction(pkctv_structexpected); \
+			char* pkctv_stract=toStringFunction(pkctv_structactual); \
+			char* pkctv_array[]={ \
+					message, \
+					KCT_ERRORMESSAGE_EXPECTED, \
+					"\"", \
+					pkctv_strexp, \
+					"\"", \
+					KCT_ERRORMESSAGE_ACTUAL, \
+					"\"", \
+					pkctv_stract, \
+					"\"" \
+			}; \
+			PKCTM_STRCAT( \
+					pkctv_currentTest->errorMessage, \
+					9, \
+					pkctv_array \
+			); \
+			PKCTM_FREESTRING(pkctv_strexp); \
+			PKCTM_FREESTRING(pkctv_stract); \
+			kct_fail(); \
+		} \
 }
 
 /**
@@ -1365,7 +1466,7 @@ TestListElement* currentTest;
  *
  * \warning {While primitive types can be inserted as values to be checked,
  * the function can't compare them with ease. If you have to compare strings or structures,
- * please use PRIVATE_KCT_ASSERTINTEQUAL or similar}
+ * please use PKCTM_ASSERTINTEQUAL or similar}
  *
  * An example of the use of this function:
  * \code
@@ -1428,40 +1529,43 @@ TestListElement* currentTest;
  *  \li expected is a value of type type;
  *  \li actual is a value of type type;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param type represents the type of expected and actual values and the type
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] type represents the type of expected and actual values and the type
  * 	of the parameters of the functions toStringFunction and compareFunction;
- * @param toStringFunction represents the name
- * @param expected the value that the developer expects to get;
- * @param actual the very value received
+ * @param[in] toStringFunction represents the name
+ * @param[in] compareFunction represents a function used to compare the 2 instances of type "type" expected and actual
+ * @param[in] expected the value that the developer expects to get;
+ * @param[in] actual the very value received
  */
 #define kct_assertNotEqualStructMsg(message,type,toStringFunction,compareFunction,expected,actual) { \
-	type private_kct_variable_kct_assertNotEqualStructMsg_structexpected=(expected); \
-	type private_kct_variable_kct_assertNotEqualStructMsg_structactual=(actual); \
-	if (compareFunction(private_kct_variable_kct_aassertNotEqualStructMsg_structexpected,private_kct_variable_kct_assertNotEqualStructMsg_structactual)==0){ \
-		char* private_kct_variable_kct_assertNotEqualStructMsg_str_exp=toStringFunction(private_kct_variable_kct_assertNotEqualStructMsg_structexpected); \
-		char* private_kct_variable_assertNotEqualStructMsg_str_act=toStringFunction(private_kct_variable_kct_assertNotEqualStructMsg_structactual); \
-		char* private_kct_assertNotEqualStructMsg_array[]={ \
-			message, \
-			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
-			"\"", \
-			private_kct_variable_kct_assertNotEqualStructMsg_str_exp, \
-			"\"", \
-			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
-			"\"", \
-			private_kct_variable_kct_assertNotEqualStructMsg_str_act, \
-			"\"" \
-		}; \
-		PRIVATE_KCT_STRCAT( \
-			currentTest->errorMessage, \
-			9, \
-			private_kct_assertNotEqualStructMsg_array \
-		); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualStructMsg_str_exp); \
-		PRIVATE_KCT_FREESTRING(private_kct_variable_kct_assertNotEqualStructMsg_str_act); \
-		kct_fail(); \
-	} \
+		type pkctv_structexpected=(expected); \
+		type pkctv_structactual=(actual); \
+		if (compareFunction(pkctv_structexpected,pkctv_structactual)==0){ \
+			char* pkctv_strexp=toStringFunction(pkctv_structexpected); \
+			char* pkctv_stract=toStringFunction(pkctv_structactual); \
+			char* pkctv_array[]={ \
+					message, \
+					KCT_ERRORMESSAGE_EXPECTED, \
+					"\"", \
+					pkctv_strexp, \
+					"\"", \
+					KCT_ERRORMESSAGE_ACTUAL, \
+					"\"", \
+					pkctv_stract, \
+					"\"" \
+			}; \
+			PKCTM_STRCAT( \
+					pkctv_currentTest->errorMessage, \
+					9, \
+					pkctv_array \
+			); \
+			PKCTM_FREESTRING(pkctv_strexp); \
+			PKCTM_FREESTRING(pkctv_stract); \
+			kct_fail(); \
+		} \
 }
+
+//################################### POINTER ASSERTIONS ###################################
 
 /**\brief Checks if 2 pointers values are equal. If not, send an error
  *
@@ -1480,12 +1584,12 @@ TestListElement* currentTest;
  *  \li expected is a value of type void* (or a relative of it);
  *  \li actual is a value of type void* (or a relative of it);
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param [void*]expected the value that the developer expects to get;
- * @param [void*]actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] expected (of type void*) the value that the developer expects to get;
+ * @param[in] actual (of type void*) the very value received
  */
 #define kct_assertEqualPtrMsg(message,expected,actual) \
-	kct_assertEqualPrimitiveMsg(message,void*,"%p",expected,actual)
+		kct_assertEqualPrimitiveMsg(message,void*,"%p",expected,actual)
 
 /**\brief Checks if 2 pointer values are not equal. If not, send an error
  *
@@ -1504,12 +1608,112 @@ TestListElement* currentTest;
  *  \li expected is a value of type void* (or a relative of it);
  *  \li actual is a value of type void* (or a relative of it);
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param [void*]expected the value that the developer expects to get;
- * @param [void*]actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] expected (of type void*) the value that the developer expects to get;
+ * @param[in] actual (of type void*) the very value received
  */
 #define kct_assertNotEqualPtrMsg(message,expected,actual) \
-	kct_assertNotEqualPrimitiveMsg(message,void*,"%p",expected,actual)
+		kct_assertNotEqualPrimitiveMsg(message,void*,"%p",expected,actual)
+
+/**\brief test whether or not a pointer is NULL
+ *
+ *
+ * The assertion checks if the pointer passed as parameter is NULL or not.
+ * Nothing will happen if pointer is a value different from 0.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *
+ * @param[in] pointer (of type void*) the pointer to test
+ */
+#define kct_assertIsNotNull(pointer) { \
+		void* pkctv_p=(pointer); \
+		if (pkctv_p==NULL){ \
+			kct_fail(); \
+		} \
+}
+
+/**\brief test whether or not a pointer is NULL
+ *
+ *
+ * The assertion checks if the pointer passed as parameter is NULL or not.
+ * Nothing will happen if pointer is a value different from 0.
+ * The string message will be shown if the pointer is 0.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *
+ * @param[in] message (of type char*) represents the message to be shown if the assertion fails
+ * @param[in] pointer (of type void*) the pointer to test
+ */
+#define kct_assertIsNotNullMsg(message,pointer) { \
+		void* pkctv_p=(pointer); \
+		if (pkctv_p==NULL){ \
+			kct_failMsg(message); \
+		} \
+}
+
+/**\brief test whether or not a pointer is not NULL
+ *
+ *
+ * The assertion checks if the pointer passed as parameter is not NULL.
+ * Nothing will happen if pointer is a value equal from 0.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *
+ * @param pointer (of type void*) the pointer to test
+ */
+#define kct_assertIsNull(pointer) { \
+		void* pkctv_p=(pointer); \
+		if (pkctv_p!=NULL){ \
+			kct_fail(); \
+		}
+
+/**\brief test whether or not a pointer is not NULL
+ *
+ *
+ * The assertion checks if the pointer passed as parameter is not NULL.
+ * Nothing will happen if pointer is a value equal from 0.
+ * A message will be shown if the pointer is not NULL.
+ *
+ * \pre
+ *  \li pointer is void* typed (or a relative of it);
+ *  \li message must be char* typed;
+ *
+ * @param[in] pointer (of type void*) the pointer to test
+ * @param[in] message (of type char*) the message to show if the pointer is not NULL
+ */
+#define kct_assertIsNullMsg(message,pointer) { \
+		void* pkctv_p=(pointer); \
+		if (pkctv_p!=NULL){ \
+			kct_failMsg(message); \
+		} \
+}
+
+//################################## INTEGER ASSERTIONS ####################################
+
+/**\brief Checks if 2 integer values are equal. If not, send an error
+ *
+ *
+ * The function checks if 2 integer are equal. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li expected is a value of type int;
+ *  \li actual is a value of type int;
+ *
+ * @param[in] expected (type int) the value that the developer expects to get;
+ * @param[in] actual (type int) the very value received
+ */
+#define kct_assertEqualInt(expected,actual) \
+		kct_assertEqualPrimitiveMsg("",int,"%d",expected,actual)
 
 /**\brief Checks if 2 integer values are equal. If not, send an error
  *
@@ -1528,12 +1732,12 @@ TestListElement* currentTest;
  *  \li expected is a value of type int;
  *  \li actual is a value of type int;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param [int]expected the value that the developer expects to get;
- * @param [int]actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] expected (of type int) the value that the developer expects to get;
+ * @param[in] actual (of type int) the very value received
  */
 #define kct_assertEqualIntMsg(message,expected,actual) \
-	kct_assertEqualPrimitiveMsg(message,int,"%d",expected,actual)
+		kct_assertEqualPrimitiveMsg(message,int,"%d",expected,actual)
 
 /**\brief Checks if 2 integer values are not equal. If not, send an error
  *
@@ -1552,12 +1756,37 @@ TestListElement* currentTest;
  *  \li expected is a value of type int;
  *  \li actual is a value of type int;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param [int]expected the value that the developer expects to get;
- * @param [int]actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] expected (of type int) the value that the developer expects to get;
+ * @param[in] actual (of type int) the very value received
  */
 #define kct_assertNotEqualIntMsg(message,expected,actual) \
-	kct_assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
+		kct_assertNotEqualPrimitiveMsg(message,int,"%d",expected,actual)
+
+/**\brief Checks if 2 integer values are not equal. If not, send an error
+ *
+ *
+ * The function checks if 2 integer are different. If they are, nothing will happen.
+ * If not, the 2 values are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected parameter converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual parameter converted into string;
+ *
+ * \pre
+ *  \li expected is a value of type int;
+ *  \li actual is a value of type int;
+ *
+ * @param[in] message (of type char*) the message to be shown if the assertion fails
+ * @param[in] expected (of type int) the value that the developer expects to get;
+ * @param[in] actual (of type int) the very value received
+ */
+#define kct_assertNotEqualInt(message,expected,actual) \
+		kct_assertNotEqualPrimitiveMsg("",int,"%d",expected,actual)
+
+//################################## FLOAT ASSERTIONS ######################################
 
 /**\brief Checks if 2 float values are not equal. If not, send an error
  *
@@ -1576,12 +1805,12 @@ TestListElement* currentTest;
  *  \li expected is a value of type float;
  *  \li actual is a value of type float;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param [float]expected the value that the developer expects to get;
- * @param [float]actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] expected (of type float) the value that the developer expects to get;
+ * @param[in] actual (of type float) the very value received
  */
 #define kct_assertEqualFloatMsg(message,expected,actual) \
-	kct_assertEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
+		kct_assertEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
 
 /**\brief Checks if 2 float values are not equal. If not, send an error
  *
@@ -1600,211 +1829,238 @@ TestListElement* currentTest;
  *  \li expected is a value of type float;
  *  \li actual is a value of type float;
  *
- * @param [char*]message represents a custom message to prepend to the error message;
- * @param [float]expected the value that the developer expects to get;
- * @param [float]actual the very value received
+ * @param[in] message (of type char*) represents a custom message to prepend to the error message;
+ * @param[in] expected (of type float) the value that the developer expects to get;
+ * @param[in] actual (of type float) the very value received
  */
 #define kct_assertNotEqualFloatMsg(message,expected,actual) \
-	kct_assertNotEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
+		kct_assertNotEqualPrimitiveMsg(message,float,"%2.3f",expected,actual)
 
-/**\brief test whether or not a pointer is NULL
+//################################## ARRAY ASSERTIONS ######################################
+
+/**\brief Check if 2 primitive array are equal. If not, sends an error
  *
+ * A primitive array is an array whose cell contain data of a primitive type. A type is considered primitive if it is of type such as:
+ * \li int [signed or unsigned];
+ * \li long [signed or unsigned];
+ * \li short [signed or unsigned];
+ * \li char [signed or unsigned];
+ * \li float;
+ * \li double;
+ * \li bool;
+ * \li pointer.
  *
- * The assertion checks if the pointer passed as parameter is NULL or not.
- * Nothing will happen if pointer is a value different from 0.
+ * The function starts with the first value inside the array and, checking one pair (one value from expected the other from actual)
+ * after another, checks if the 2 array expected and actual are equal.
+ * \note
+ *  The function checks the equality of the 2 array based only on expected array. The major consequence i that 2 array might be equal even
+ *  if the lengths are different! For example these 2 array are equal for this function:
+ *  \verbatim
+ *  	expected={1,2,3,4,5} (length: 5)
+ *  	actual={1,2,3,4,5,6}
+ *  	1==1, 2==2, 3==3, 4==4, 5==5
+ *  \endverbatim
+ *  This happens because we don't know the length of the actual array. Note that the viceversa is \b probably \b marked as "different":
+ *  \verbatim
+ *  	expected={1,2,3,4,5,6}
+ *  	actual={1,2,3,4,5}
+ *  	1==1, 2==2, 3==3, 4==4, 5==5, 6==random data (probably wrong)
+ *  \endverbatim
  *
- * \pre
- *  \li pointer is void* typed (or a relative of it);
+ * The function checks if 2 array are equal (starting from the first value inside the array till the last one).
+ * If they are, nothing will happen. If not, the 2 values differents are converted in string and a error message is thrown
+ * at the user. The error is so composed:
+ *  -# message parameter;
+ *  -# string "position: ";
+ *  -# index where the 2 array differs;
+ *  -# KCT_ERRORMESSAGE_EXPECTED;
+ *  -# expected value at the index converted into string;
+ *  -# KCT_ERRORMESSAGE_ACTUAL;
+ *  -# actual value at the index converted into string;
  *
- * @param [void*]pointer the pointer to test
+ * @param[in] message (of type char*) the optional message to show if the 2 array differs
+ * @param[in] type the type of the cells owned by "expected" and "actual" array
+ * @param[in] conversion (of type char*) how the type should be converted in string. Values accepted are all those accepted by printf,
+ * such as %d, %1.3f %0x ex cetera.
+ * @param[in] expectedlength (of type int) represent the length of the array "expected"
+ * @param[in] expected (of type type[]) the array expected by the assertion
+ * @param[in] actual (of type type[]) the array got by the user. It must be checked against the array "expected"
+ *
  */
-#define kct_assertIsNotNull(pointer) { \
-	void* private_kct_variable_kct_assertIsNotNull=(pointer); \
-	if (private_kct_variable_kct_assertIsNotNull==NULL){ \
-		kct_fail(); \
-	} \
+#define kct_assertEqualArrayPrimitiveMsg(message,type,conversion,expectedlength,expected,actual) { \
+		/*array expected*/ \
+		type* pkctv_expected=(expected); \
+		/*actual array get by the user*/ \
+		type* pkctv_actual=(actual); \
+		type pkctv_tmp_expected,pkctv_tmp_actual; \
+		/* length of the array expected*/ \
+		int pkctv_expectedlength=(expectedlength); \
+		int pkctv_i; \
+		for (pkctv_i=0;pkctv_i<pkctv_expectedlength;pkctv_i++){ \
+			pkctv_tmp_expected=pkctv_expected[pkctv_i]; \
+			pkctv_tmp_actual=pkctv_actual[pkctv_i]; \
+			if ((pkctv_tmp_actual)!=(pkctv_tmp_expected)){ \
+				/*Represents a string representation of the given primitive type*/ \
+				char* pkctv_strexp; \
+				/*Represents a string representation of the given primitive type*/ \
+				char* pkctv_stract; \
+				/*Represents a string representation of the cunter pkctv_i*/ \
+				char* pkctv_stri; \
+				PKCTM_INITSTRING(pkctv_strexp,pkctv_tmp_expected,conversion); \
+				PKCTM_INITSTRING(pkctv_stract,pkctv_tmp_actual,conversion); \
+				PKCTM_INITSTRING(pkctv_stri,pkctv_i,"%d"); \
+				/*Represents an array of string which, concatenated, will generated the error message*/ \
+				char* pkctv_array[]={ \
+						message, \
+						"position: ", \
+						pkctv_stri, \
+						KCT_ERRORMESSAGE_EXPECTED, \
+						pkctv_strexp, \
+						KCT_ERRORMESSAGE_ACTUAL, \
+						pkctv_stract \
+				}; \
+				PKCTM_STRCAT( \
+						pkctv_currentTest->errorMessage, \
+						7, \
+						pkctv_array \
+				); \
+				PKCTM_FREESTRING(pkctv_strexp); \
+				PKCTM_FREESTRING(pkctv_stract); \
+				kct_fail(); \
+			} \
+} \
 }
 
-/**\brief test whether or not a pointer is NULL
- *
- *
- * The assertion checks if the pointer passed as parameter is NULL or not.
- * Nothing will happen if pointer is a value different from 0.
- * The string message will be shown if the pointer is 0.
- *
- * \pre
- *  \li pointer is void* typed (or a relative of it);
- *
- * @param [void*]pointer the pointer to test
- */
-#define kct_assertIsNotNullMsg(message,pointer) { \
-	void* private_kct_variable_kct_assertIsNotNullMsg=(pointer); \
-	if (private_kct_variable_kct_assertIsNotNullMsg==NULL){ \
-		kct_failMsg(message); \
-	} \
-}
 
-/**\brief test whether or not a pointer is not NULL
- *
- *
- * The assertion checks if the pointer passed as parameter is not NULL.
- * Nothing will happen if pointer is a value equal from 0.
- *
- * \pre
- *  \li pointer is void* typed (or a relative of it);
- *
- * @param [void*]pointer the pointer to test
- */
-#define kct_assertIsNull(pointer) { \
-	void* private_kct_variable_kct_assertIsNull=(pointer); \
-	if (private_kct_variable_kct_assertIsNull!=NULL){ \
-		kct_fail(); \
-	}
-
-/**\brief test whether or not a pointer is not NULL
- *
- *
- * The assertion checks if the pointer passed as parameter is not NULL.
- * Nothing will happen if pointer is a value equal from 0.
- * A message will be shown if the pointer is not NULL.
- *
- * \pre
- *  \li pointer is void* typed (or a relative of it);
- *  \li message must be char* typed;
- *
- * @param [void*]pointer the pointer to test
- * @param [char*]message the message to show if the pointer is not NULL
- */
-#define kct_assertIsNullMsg(message,pointer) { \
-	void* private_kct_variable_kct_assertIsNullMsg=(pointer); \
-	if (private_kct_variable_kct_assertIsNullMsg!=NULL){ \
-		kct_failMsg(message); \
-	} \
-}
-
- /**\brief checks if a value is in a given interval
-  *
-  * The assertion allows you to check if a value (integer of float it doesn't matter)
-  * is inside a certain interval. The macro supports all the type of interval:
-  *
-  * -* both interval inf and sup are <b>not</b> included in the interval itself: for example
-  * 	5 is not in the interval \f$]3;5[\f$
-  * -* only the interval inf is included in the interval: for example
-  * 	5 is in the interval \f$[5;7[\f$
-  * -* only the interval sup is cinluded in the interval: for example
-  * 	5 is in the interval \f$]3;5]\f$
-  * -* both interval inf and sup are included in the interval: for example
-  * 	5 is in the interval \f$[3;5]\f$
-  *
-  * \pre
-  *  \li lowerbound is an numeric type (integer, float, signed, unsigned);
-  *  \li upperbound is an numeric type (integer, float, signed, unsigned);
-  *  \li actualbound is an numeric type(integer, float, signed, unsigned);
-  *  \li lowin is a bool;
-  *  \li upin is a bool;
-  *  \li optmessage is a char*;
-  *  \li conversion is a fprintf compatible format expression (like %d, %lu or %2.6f);
-  *
-  *	The function easily accepts even randomic funcitions: the macro will behave
-  *	correctly even if you code:
-  *	\code
-  *		kct_assertExtremis("randomic numbers",3,5,true,true,rand()%6); //wrong way to do it
-  *	\endcode
-  *
-  *	If you are worry about the behaviour, however, you can always do like this:
-  *	\code
-  *		int a=rand()%6;
-  *		kct_assertExtremis("randomic numbers",int,"%d",3,5,true,true,a); //correct way to do it
-  *	\endcode
-  *
-  * @param optmessage the optional message to show if actual is not in the interval useful to developr to carry additional information
-  * @param type the most general type of the number used in the interval. For example if lowerbound and actual are "int" but upperbound
-  * 	is a "double" the type should be set to "double". If you uncertain of what type you want to do "double" should be a appropriate choice.
-  * @param lowerbound the inf of interval
-  * @param upperbound the sup of the interval
-  * @param lowin TRUE if the inf is included in the interval
-  * @param upin TRUE if the sup is included in the interval
-  * @param actual the value to check if is contained between lowerbound and upperbound
-  */
-#define kct_assertExtremisMsg(optmessage,type,conversion,lowerbound,upperbound,lowin,upin,actual) { \
-	type private_kct_assertExtremisMsg_actual=(actual); \
-	type private_kct_assertExtremisMsg_lowerbound=(lowerbound); \
-	type private_kct_assertExtremisMsg_upperbound=(upperbound); \
-	if ((private_kct_assertExtremisMsg_actual<private_kct_assertExtremisMsg_lowerbound) || \
-		(private_kct_assertExtremisMsg_actual>private_kct_assertExtremisMsg_upperbound) || \
-		((lowin==false) && (private_kct_assertExtremisMsg_actual==private_kct_assertExtremisMsg_lowerbound)) || \
-		((upin==false) && (private_kct_assertExtremisMsg_actual==private_kct_assertExtremisMsg_upperbound)) \
-	){ \
-		char* private_kct_assertExtremisMsg_str_lowerbound; \
-		char* private_kct_assertExtremisMsg_str_upperbound; \
-		char* private_kct_assertExtremisMsg_str_actual; \
-		PRIVATE_KCT_INITSTRING(private_kct_assertExtremisMsg_str_lowerbound,private_kct_assertExtremisMsg_lowerbound,conversion); \
-		PRIVATE_KCT_INITSTRING(private_kct_assertExtremisMsg_str_upperbound,private_kct_assertExtremisMsg_upperbound,conversion); \
-		PRIVATE_KCT_INITSTRING(private_kct_assertExtremisMsg_str_actual,private_kct_assertExtremisMsg_actual,conversion); \
-		char* kct_private_assertExtremisMsg_array[]={ \
-			optmessage, \
-			PRIVATE_KCT_ERRORMESSAGE_EXPECTED, \
-			(lowin==true?"[":"]"), \
-			private_kct_assertExtremisMsg_str_lowerbound, \
-			"; ", \
-			private_kct_assertExtremisMsg_str_upperbound, \
-			(upin==true?"]":"["), \
-			PRIVATE_KCT_ERRORMESSAGE_ACTUAL, \
-			"\"", \
-			private_kct_assertExtremisMsg_str_actual, \
-			"\"" \
-		}; \
-		PRIVATE_KCT_STRCAT(currentTest->errorMessage,11,kct_private_assertExtremisMsg_array); \
-		PRIVATE_KCT_FREESTRING(private_kct_assertExtremisMsg_str_lowerbound); \
-		PRIVATE_KCT_FREESTRING(private_kct_assertExtremisMsg_str_upperbound); \
-		PRIVATE_KCT_FREESTRING(private_kct_assertExtremisMsg_str_actual); \
-		kct_fail(); \
-	} \
-}
+//################################## OTHER ASSERTIONS ######################################
 
 /**\brief checks if a value is in a given interval
-  *
-  * The assertion allows you to check if a value (integer of float it doesn't matter)
-  * is inside a certain interval. The macro supports all the type of interval:
-  *
-  * -* both interval inf and sup are <b>not</b> included in the interval itself: for example
-  * 	5 is not in the interval \f$]3;5[\f$
-  * -* only the interval inf is included in the interval: for example
-  * 	5 is in the interval \f$[5;7[\f$
-  * -* only the interval sup is cinluded in the interval: for example
-  * 	5 is in the interval \f$]3;5]\f$
-  * -* both interval inf and sup are included in the interval: for example
-  * 	5 is in the interval \f$[3;5]\f$
-  *
-  * \pre
-  *  \li lowerbound is an numeric type (integer, float, signed, unsigned);
-  *  \li upperbound is an numeric type (integer, float, signed, unsigned);
-  *  \li actualbound is an numeric type(integer, float, signed, unsigned);
-  *  \li lowin is a bool;
-  *  \li upin is a bool;
-  *  \li conversion is a fprintf compatible format expression (like %d, %lu or %2.6f);
-  *
-  *	The function easily accepts even randomic funcitions: the macro will behave
-  *	correctly even if you code:
-  *	\code
-  *		kct_assertExtremis(int,"%d",3,5,true,true,rand()%6); //wrong way to do it
-  *	\endcode
-  *
-  *	If you are worry about the behaviour, however, you can always do like this:
-  *	\code
-  *		int a=rand()%6;
-  *		kct_assertExtremis(int,"%d",3,5,true,true,a); //correct way to do it
-  *	\endcode
-  *
-  * @param type the most general type of the number used in the interval. For example if lowerbound and actual are "int" but upperbound
-  * 	is a "double" the type should be set to "double". If you uncertain of what type you want to do "double" should be a appropriate choice.
-  * @param lowerbound the inf of interval
-  * @param upperbound the sup of the interval
-  * @param lowin TRUE if the inf is included in the interval
-  * @param upin TRUE if the sup is included in the interval
-  * @param actual the value to check if is contained between lowerbound and upperbound
-  */
+ *
+ * The assertion allows you to check if a value (integer of float it doesn't matter)
+ * is inside a certain interval. The macro supports all the type of interval:
+ *
+ * -* both interval inf and sup are <b>not</b> included in the interval itself: for example
+ * 	5 is not in the interval \f$]3;5[\f$
+ * -* only the interval inf is included in the interval: for example
+ * 	5 is in the interval \f$[5;7[\f$
+ * -* only the interval sup is cinluded in the interval: for example
+ * 	5 is in the interval \f$]3;5]\f$
+ * -* both interval inf and sup are included in the interval: for example
+ * 	5 is in the interval \f$[3;5]\f$
+ *
+ * \pre
+ *  \li lowerbound is an numeric type (integer, float, signed, unsigned);
+ *  \li upperbound is an numeric type (integer, float, signed, unsigned);
+ *  \li actualbound is an numeric type(integer, float, signed, unsigned);
+ *  \li lowin is a bool;
+ *  \li upin is a bool;
+ *  \li optmessage is a char*;
+ *  \li conversion is a fprintf compatible format expression (like %d, %lu or %2.6f);
+ *
+ *	The function easily accepts even randomic funcitions: the macro will behave
+ *	correctly even if you code:
+ *	\code
+ *		kct_assertExtremis("randomic numbers",3,5,true,true,rand()%6); //wrong way to do it
+ *	\endcode
+ *
+ *	If you are worry about the behaviour, however, you can always do like this:
+ *	\code
+ *		int a=rand()%6;
+ *		kct_assertExtremis("randomic numbers",int,"%d",3,5,true,true,a); //correct way to do it
+ *	\endcode
+ *
+ * @param[in] optmessage (of type char*) the optional message to show if actual is not in the interval useful to developr to carry additional information
+ * @param[in] type the most general type of the number used in the interval. For example if lowerbound and actual are "int" but upperbound
+ * 	is a "double" the type should be set to "double". If you uncertain of what type you want to do "double" should be a appropriate choice.
+ * @param[in] conversion the stirng representing how to correctly convert the number into a string. Values accepted are all those accepted by
+ * 	printf, such as %d, %f, %04d, %3.4f, %lu ex cetera.
+ * @param[in] lowerbound (of type "type") the inf of interval
+ * @param[in] upperbound (of type "type") the sup of the interval
+ * @param[in] lowin (of type bool) TRUE if the inf is included in the interval
+ * @param[in] upin (of type bool) TRUE if the sup is included in the interval
+ * @param[in] actual (or type "type") the value to check if is contained between lowerbound and upperbound
+ */
+#define kct_assertExtremisMsg(optmessage,type,conversion,lowerbound,upperbound,lowin,upin,actual) { \
+		type pkctv_actual=(actual); \
+		type pkctv_lowerbound=(lowerbound); \
+		type pkctv_upperbound=(upperbound); \
+		if ((pkctv_actual<pkctv_lowerbound) || \
+				(pkctv_actual>pkctv_upperbound) || \
+				((lowin==false) && (pkctv_actual==pkctv_lowerbound)) || \
+				((upin==false) && (pkctv_actual==pkctv_upperbound)) \
+		){ \
+			char* pkctv_str_lowerbound; \
+			char* pkctv_str_upperbound; \
+			char* pkctv_str_actual; \
+			PKCTM_INITSTRING(pkctv_str_lowerbound,pkctv_lowerbound,conversion); \
+			PKCTM_INITSTRING(pkctv_str_upperbound,pkctv_upperbound,conversion); \
+			PKCTM_INITSTRING(pkctv_str_actual,pkctv_actual,conversion); \
+			char* pkctv_array[]={ \
+					optmessage, \
+					KCT_ERRORMESSAGE_EXPECTED, \
+					(lowin==true?"[":"]"), \
+					pkctv_str_lowerbound, \
+					"; ", \
+					pkctv_str_upperbound, \
+					(upin==true?"]":"["), \
+					KCT_ERRORMESSAGE_ACTUAL, \
+					"\"", \
+					pkctv_str_actual, \
+					"\"" \
+			}; \
+			PKCTM_STRCAT(pkctv_currentTest->errorMessage,11,pkctv_array); \
+			PKCTM_FREESTRING(pkctv_str_lowerbound); \
+			PKCTM_FREESTRING(pkctv_str_upperbound); \
+			PKCTM_FREESTRING(pkctv_str_actual); \
+			kct_fail(); \
+		} \
+			}
+
+/**\brief checks if a value is in a given interval
+ *
+ * The assertion allows you to check if a value (integer of float it doesn't matter)
+ * is inside a certain interval. The macro supports all the type of interval:
+ *
+ * -* both interval inf and sup are <b>not</b> included in the interval itself: for example
+ * 	5 is not in the interval \f$]3;5[\f$
+ * -* only the interval inf is included in the interval: for example
+ * 	5 is in the interval \f$[5;7[\f$
+ * -* only the interval sup is cinluded in the interval: for example
+ * 	5 is in the interval \f$]3;5]\f$
+ * -* both interval inf and sup are included in the interval: for example
+ * 	5 is in the interval \f$[3;5]\f$
+ *
+ * \pre
+ *  \li lowerbound is an numeric type (integer, float, signed, unsigned);
+ *  \li upperbound is an numeric type (integer, float, signed, unsigned);
+ *  \li actualbound is an numeric type(integer, float, signed, unsigned);
+ *  \li lowin is a bool;
+ *  \li upin is a bool;
+ *  \li conversion is a fprintf compatible format expression (like %d, %lu or %2.6f);
+ *
+ *	The function easily accepts even randomic funcitions: the macro will behave
+ *	correctly even if you code:
+ *	\code
+ *		kct_assertExtremis(int,"%d",3,5,true,true,rand()%6); //wrong way to do it
+ *	\endcode
+ *
+ *	If you are worry about the behaviour, however, you can always do like this:
+ *	\code
+ *		int a=rand()%6;
+ *		kct_assertExtremis(int,"%d",3,5,true,true,a); //correct way to do it
+ *	\endcode
+ *
+ * @param[in] type the most general type of the number used in the interval. For example if lowerbound and actual are "int" but upperbound
+ * 	is a "double" the type should be set to "double". If you uncertain of what type you want to do "double" should be a appropriate choice.
+ * @param[in] conversion the stirng representing how to correctly convert the number into a string. Values accepted are all those accepted by
+ * 	printf, such as %d, %f, %04d, %3.4f, %lu ex cetera.
+ * @param[in] lowerbound the inf of interval
+ * @param[in] upperbound the sup of the interval
+ * @param[in] lowin TRUE if the inf is included in the interval
+ * @param[in] upin TRUE if the sup is included in the interval
+ * @param[in] actual the value to check if is contained between lowerbound and upperbound
+ */
 #define kct_assertExtremis(type,conversion,lowerbound,upperbound,lowin,upin,actual) \
-	kct_assertExtremisMsg("",type,conversion,lowerbound,upperbound,lowin,upin,actual);
+		kct_assertExtremisMsg("",type,conversion,lowerbound,upperbound,lowin,upin,actual);
 
 #endif /* KOLDARCTESTER_H_ */

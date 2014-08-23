@@ -63,5 +63,6 @@
 <booleanAttribute key="org.eclipse.linuxtools.valgrind.memcheck.MEMCHECK_SHOWREACH" value="false"/>
 <booleanAttribute key="org.eclipse.linuxtools.valgrind.memcheck.MEMCHECK_TRACKORIGINS" value="false"/>
 <booleanAttribute key="org.eclipse.linuxtools.valgrind.memcheck.MEMCHECK_UNDEF" value="true"/>
+<stringAttribute key="process_factory_id" value="org.eclipse.cdt.dsf.gdb.GdbProcessFactory"/>
 <stringAttribute key="provider" value="org.eclipse.linuxtools.profiling.provider.valgrind.memcheck"/>
 </launchConfiguration>
